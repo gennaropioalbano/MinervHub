@@ -1,9 +1,11 @@
 package it.minervhub.controller;
 
 import it.minervhub.service.AnnuncioService;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/v1/annunci")
 public class AnnuncioController {
 
     private AnnuncioService annuncioService;

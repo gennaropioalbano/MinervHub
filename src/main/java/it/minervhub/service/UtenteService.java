@@ -5,7 +5,6 @@ import it.minervhub.repository.UtenteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UtenteService {
@@ -14,5 +13,13 @@ public class UtenteService {
 
     public UtenteService(UtenteRepository utenteRepository) {
         this.utenteRepository = utenteRepository;
+    }
+
+    public Utente salvaUtente(Utente utente) {
+        return utenteRepository.save(utente);
+    }
+
+    public List<Utente> trovaTuttiGliUtenti() {
+        return utenteRepository.findAll();
     }
 }

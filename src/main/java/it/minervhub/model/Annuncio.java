@@ -13,7 +13,7 @@ public class Annuncio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_annuncio")
-    private Long idAnnuncio;
+    private int idAnnuncio;
 
     @Column(name = "titolo", length = 50, nullable = false)
     private String titolo;
