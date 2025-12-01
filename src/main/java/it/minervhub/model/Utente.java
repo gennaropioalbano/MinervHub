@@ -15,7 +15,7 @@ public class Utente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long idUtente;
+    private int idUtente;
 
     @Column(name = "nome", length = 50, nullable = false)
     private String nome;
@@ -26,7 +26,7 @@ public class Utente {
     @Column(name = "email", length = 100, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "dataNascita", nullable = false)
+    @Column(name = "dataNascita")
     private LocalDate dataNascita;
 
     @Column(name = "password", length = 50, nullable = false)
