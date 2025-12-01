@@ -21,6 +21,10 @@ public class Annuncio {
     @Column(name = "descrizione", length = 150, nullable = false)
     private String descrizione;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "stato", nullable = false)
+    private StatoAnnuncio stato;
+
     @Column(name = "esame", length = 30, nullable = false)
     private String esame;
 
