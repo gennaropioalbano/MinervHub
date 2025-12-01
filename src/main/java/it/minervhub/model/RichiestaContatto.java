@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "richiestacontatto")
+@Table(name = "richiesta_contatto")
 public class RichiestaContatto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_richiesta")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "messaggio", length = 200, nullable = false)
@@ -39,6 +39,6 @@ public class RichiestaContatto {
     private Utente tutor;
 
     @ManyToOne
-    @JoinColumn(name = "id_annuncio", nullable = false)
+    @JoinColumn(name = "idAnnuncio", nullable = false)
     private Annuncio annuncio;
 }
