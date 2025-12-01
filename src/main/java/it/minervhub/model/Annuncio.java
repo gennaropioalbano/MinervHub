@@ -21,6 +21,9 @@ public class Annuncio {
     @Column(name = "descrizione", length = 150, nullable = false)
     private String descrizione;
 
+    @Column(name = "disponibile", nullable = false)
+    private boolean disponibile;
+
     @Column(name = "esame", length = 30, nullable = false)
     private String esame;
 
