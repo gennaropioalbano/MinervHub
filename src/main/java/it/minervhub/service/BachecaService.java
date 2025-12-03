@@ -5,6 +5,7 @@ import it.minervhub.repository.AnnuncioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BachecaService {
@@ -20,5 +21,10 @@ public class BachecaService {
 
     public List<Annuncio> getAnnunciFiltrati(String corsoLaurea, String esame, Integer tariffaMax) {
         return annuncioRepository.filtraAnnunci(corsoLaurea, esame, tariffaMax);
+    }
+
+    public Annuncio getAnnuncioById(Long id){
+        Optional<Annuncio> annuncio = annuncioRepository.findById(id);
+        return annuncio.orElse(null);
     }
 }

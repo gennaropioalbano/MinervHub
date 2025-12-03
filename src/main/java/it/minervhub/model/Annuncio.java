@@ -39,4 +39,76 @@ public class Annuncio {
     @ManyToOne
     @JoinColumn(name = "autore", nullable = false)
     private Utente autore;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public boolean isDisponibile() {
+        return disponibile;
+    }
+
+    public void setDisponibile(boolean disponibile) {
+        this.disponibile = disponibile;
+    }
+
+    public String getEsame() {
+        return esame;
+    }
+
+    public void setEsame(String esame) {
+        this.esame = esame;
+    }
+
+    public Integer getTariffaOraria() {
+        return tariffaOraria;
+    }
+
+    public void setTariffaOraria(Integer tariffaOraria) {
+        this.tariffaOraria = tariffaOraria;
+    }
+
+    public String getScambioLezioni() {
+        return scambioLezioni;
+    }
+
+    public void setScambioLezioni(String scambioLezioni) {
+        this.scambioLezioni = scambioLezioni;
+    }
+
+    public String getCorsoLaurea() {
+        return corsoLaurea;
+    }
+
+    public void setCorsoLaurea(String corsoLaurea) {
+        this.corsoLaurea = corsoLaurea;
+    }
+
+    public Utente getAutore() {
+        return autore;
+    }
+
+    public void setAutore(Utente autore) {
+        this.autore = autore;
+    }
 }
