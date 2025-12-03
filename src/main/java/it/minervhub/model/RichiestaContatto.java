@@ -31,11 +31,11 @@ public class RichiestaContatto {
     private StatoRichiesta stato;
 
     @ManyToOne
-    @JoinColumn(name = "allievo", nullable = false)
+    @JoinColumn(name = "allievo", referencedColumnName = "id", nullable = false)
     private Utente allievo;
 
     @ManyToOne
-    @JoinColumn(name = "tutor", nullable = false)
+    @JoinColumn(name = "tutor", referencedColumnName = "id", nullable = false)
     private Utente tutor;
 
     @ManyToOne
