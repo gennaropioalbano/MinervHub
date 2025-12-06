@@ -1,11 +1,11 @@
-<header th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org">
-    <h1 class="logo">MinervHub</h1>
-    <nav>
-        <ul class="nav_links">
-            <li><a href="#">ciao</a></li>
-            <li><a href="#">ciao</a></li>
-            <li><a href="#">ciao</a></li>
-        </ul>
-    </nav>
-    <a class="user" href="#"><i class="fa-solid fa-user"></i></a>
+<header th:fragment="navFragment">
+    <div class="left-section">
+        <a><img src="/images/logo.png"></a>
+        <h1 class="logo">MinervHub</h1>
+    </div>
+
+    <div class="right-section">
+        <a href="#" class="btn-lezioni fancy-border">Dare lezioni</a>
+        <a class="user fancy-border" href="#">Accedi</a>
+    </div>
 </header>

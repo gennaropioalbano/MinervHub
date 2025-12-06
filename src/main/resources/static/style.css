@@ -4,14 +4,18 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: #24252A;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #ffffff;
 }
 
 li, a, button {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 16px;
-    color: #edf0f1;
+    color: #156082;
     text-decoration: none;
 }
 
@@ -19,26 +23,102 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 10%;
+    padding: 25px 5%;
 }
 
 .logo {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #156082;
+
     cursor: pointer;
 }
 
-.nav_links {
-    list-style: none;
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.nav_links li {
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.fancy-border {
+    position: relative;
     display: inline-block;
-    padding: 0 20px;
+    padding: 10px 18px;
+    color: #156082;
+    z-index: 1;
 }
 
-.nav_links li a {
-    transition: all 0.3s ease 0s;
+.fancy-border::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid #156082;
+    border-radius: 999px;
+
+    background-color: #156082;
+    z-index: -1;
+
+    transform: scaleY(0);
+    opacity: 0;
+    transform-origin: bottom;
+
+    transition: transform 0.20s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.10s ease;
 }
 
-.nav_links li a:hover {
-    color: #0088a9;
+.fancy-border:hover::after {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+.fancy-border:hover {
+    color: white;
+}
+
+.grid-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.card span {
+    color: #555;
+}
+
+.card .price {
+    font-weight: bold;
+    color: #1a73e8;
+    margin-top: 10px;
 }
