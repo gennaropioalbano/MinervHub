@@ -1,4 +1,4 @@
-package it.minervhub.config; // O il tuo package
+package it.minervhub.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,19 +16,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // 1. Pagine accessibili a TUTTI (senza login)
-                        .requestMatchers("/", "/home", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                        // 2. Tutte le altre pagine richiedono il LOGIN
+                        .requestMatchers("/", "/home", "/bacheca", "/bacheca/**", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // La nostra pagina custom
-                        .defaultSuccessUrl("/home", true) // Dove vai se il login riesce
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout") // Dove vai dopo il logout
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
 

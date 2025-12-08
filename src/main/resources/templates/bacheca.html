@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Bacheca | MinervHub</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<header th:replace="fragments/navbar :: navFragment"></header>
+
+<!-- Cover -->
+<section class="cover">
+  <img th:src="@{/images/cover-bacheca.jpg}" alt="Copertina Bacheca">
+  <h1 class="cover-text">Bacheca Annunci</h1>
+</section>
+
+<form action="#" method="get" style="margin-bottom: 30px; text-align:center;">
+  <input type="text" name="corsoLaurea" placeholder="Corso di laurea">
+  <input type="text" name="esame" placeholder="Esame">
+  <input type="number" name="tariffaMax" placeholder="Tariffa massima">
+  <button type="submit" class="fancy-border">Filtra</button>
+</form>
+
+
+<!-- Grid annunci -->
+<div class="grid-wrapper">
+  <div class="grid">
+
+    <!-- Ciclo sugli annunci -->
+    <div class="card" th:each="annuncio : ${annunci}">
+      <div class="card-content">
+        <h3 th:text="${annuncio.titolo}">Titolo Annuncio</h3>
+        <span th:text="${annuncio.descrizione}">Descrizione breve</span>
+        <span th:text="'Esame: ' + ${annuncio.esame}">Esame</span>
+        <span th:text="'Corso di laurea: ' + ${annuncio.corsoLaurea}">Corso</span>
+        <span th:text="'Tariffa oraria: ' + ${annuncio.tariffaOraria} + '€'">Tariffa</span>
+        <span th:text="'Tutor: ' + ${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}">Tutor</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
