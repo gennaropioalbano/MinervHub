@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base::layout(~{::section})}">
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout(~{::section})}">
 <head>
     <title>Login</title>
 </head>
@@ -13,29 +13,34 @@
                     <div class="card-header text-center fs-4">Accedi</div>
                     <div class="card-body">
 
-                        <div th:if="${param.error}" class="alert alert-danger">
-                            Email o password errati.
+                        <!-- Messaggio di successo registrazione -->
+                        <div th:if="${param.success}" class="alert alert-success" role="alert">
+                            Registrazione completata! Effettua il login.
                         </div>
-                        <div th:if="${param.logout}" class="alert alert-success">
+
+                        <!-- Messaggio di errore login -->
+                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                            Email o password errati. Riprova.
+                        </div>
+
+                        <!-- Messaggio logout -->
+                        <div th:if="${param.logout}" class="alert alert-info" role="alert">
                             Logout effettuato con successo.
-                        </div>
-                        <div th:if="${param.success}" class="alert alert-success">
-                            Registrazione completata! Ora puoi accedere.
                         </div>
 
                         <form th:action="@{/login}" method="post">
 
                             <div class="mb-3">
-                                <label>Email</label>
-                                <input type="email" name="username" class="form-control" required autofocus placeholder="inserisci la mail">
+                                <label>Email Universitaria</label>
+                                <input type="email" class="form-control" name="email" required placeholder="latuamail@studenti.it">
                             </div>
 
                             <div class="mb-3">
                                 <label>Password</label>
-                                <input type="password" name="password" class="form-control" required placeholder="inserisci la password">
+                                <input type="password" class="form-control" name="password" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary col-md-12">Login</button>
+                            <button type="submit" class="btn btn-primary col-md-12">Accedi</button>
                         </form>
                     </div>
 
