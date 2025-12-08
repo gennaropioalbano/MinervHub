@@ -29,7 +29,7 @@ public class Utente {
     @Column(name = "dataNascita")
     private LocalDate dataNascita;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Column(name = "corsoLaurea", length = 50)

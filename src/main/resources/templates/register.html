@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout(~{::section})}">
+<head>
+    <title>Registrazione</title>
+</head>
+<body>
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header text-center fs-4">Crea Account</div>
+                    <div class="card-body">
+
+                        <form th:action="@{/registrazione}" th:object="${utente}" method="post">
+
+                            <div class="mb-3">
+                                <label>Nome</label>
+                                <input type="text" class="form-control" th:field="*{nome}" required placeholder="Il tuo nome">
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Cognome</label>
+                                <input type="text" class="form-control" th:field="*{cognome}" required placeholder="Il tuo cognome">
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Email Universitaria</label>
+                                <input type="email" class="form-control" th:field="*{email}" required placeholder="latuamail@studenti.it">
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Password</label>
+                                <input type="password" class="form-control" th:field="*{password}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Corso di Laurea</label>
+                                <input type="text" class="form-control" th:field="*{corsoLaurea}" placeholder="Es. Informatica">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary col-md-12">Registrati</button>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <small>Hai già un account? <a th:href="@{/login}">Accedi qui</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

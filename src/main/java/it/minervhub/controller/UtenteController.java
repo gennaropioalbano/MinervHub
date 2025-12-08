@@ -2,31 +2,35 @@ package it.minervhub.controller;
 
 import it.minervhub.model.Utente;
 import it.minervhub.service.UtenteService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/v1/utenti")
+@Controller
 public class UtenteController {
 
-    private final UtenteService utenteService;
+    @Autowired
+    private UtenteService utenteService;
 
-    public UtenteController(UtenteService utenteService) {
-        this.utenteService = utenteService;
+    // 1. Pagina di Login
+    @GetMapping("/login")
+    public String login() {
+        return "login"; // Cerca login.html
     }
 
-    @PostMapping
-    public ResponseEntity<Utente> creaUtente(@RequestBody Utente utente) {
-        Utente nuovoUtente = utenteService.salvaUtente(utente);
-        return new ResponseEntity<>(nuovoUtente, HttpStatus.CREATED);
+    // 2. Mostra il form di Registrazione
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        model.addAttribute("utente", new Utente());
+        return "register";
     }
 
-    @GetMapping
-    public ResponseEntity<List<Utente>> getAllUtente() {
-        List<Utente> utenti = utenteService.trovaTuttiGliUtenti();
-        return ResponseEntity.ok(utenti);
+    @PostMapping("/register")
+    public String doRegister(@ModelAttribute Utente utente) {
+        utenteService.salvaUtente(utente);
+        return "redirect:/login?success";
     }
 }

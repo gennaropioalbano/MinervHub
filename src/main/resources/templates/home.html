@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document</title>
 
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navFragment}"></div>
     <div class="cover">
         <img src="/images/cover.png" alt="">
-        <h1 class="cover-text">Trova il tutor ideale</h1>
+        <h1 class="cover-text">
+            Trova
+            <br>
+            il tutor ideale
+        </h1>
     </div>
     <div th:replace="~{fragments/announcementsGrid :: announcementsGrid}"></div>
 </body>
