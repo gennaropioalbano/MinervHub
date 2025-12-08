@@ -34,4 +34,72 @@ public class Utente {
 
     @Column(name = "corsoLaurea", length = 50)
     private String corsoLaurea;
+
+    public Utente() {
+    }
+
+    public Utente(LocalDate dataNascita, String nome, String cognome, String email, String password, String corsoLaurea) {
+        this.dataNascita = dataNascita;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.corsoLaurea = corsoLaurea;
+    }
+
+    public Long getIdUtente() {
+        return idUtente;
+    }
+
+    public void setIdUtente(Long idUtente) {
+        this.idUtente = idUtente;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getDataNascita() {
+        return dataNascita;
+    }
+
+    public void setDataNascita(LocalDate dataNascita) {
+        this.dataNascita = dataNascita;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCorsoLaurea() {
+        return corsoLaurea;
+    }
+
+    public void setCorsoLaurea(String corsoLaurea) {
+        this.corsoLaurea = corsoLaurea;
+    }
 }
