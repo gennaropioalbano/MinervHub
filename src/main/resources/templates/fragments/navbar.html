@@ -8,20 +8,25 @@
         </a>
     </div>
 
-    <div class="right-section">
-        <a href="#" class="btn-lezioni fancy-border">Dare lezioni</a>
+    <ul class="nav-links">
+        <li class="user fancy-border">Bacheca</li>
+        <li class="class fancy-border">Dare lezioni</li>
+    </ul>
 
+    <div class="right-section">
         <div sec:authorize="!isAuthenticated()">
-            <a class="user fancy-border" th:href="@{/login}">Accedi</a>
+            <a class="user fancy-border" th:href="@{/login}">
+                <i class="fa-solid fa-user"></i>
+            </a>
         </div>
 
         <div class="loggato" sec:authorize="isAuthenticated()">
             <a class="user fancy-border">
-                <span>BELLO</span>
+                <i class="fa-solid fa-user"></i>
             </a>
 
             <form th:action="@{/logout}" method="post">
-                <button type="submit" class="user fancy-border esc">Esci</button>
+                <button type="submit" class="user fancy-border esc"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
             </form>
         </div>
     </div>

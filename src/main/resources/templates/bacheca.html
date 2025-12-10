@@ -38,10 +38,11 @@
         <span th:text="'Tariffa oraria: ' + ${annuncio.tariffaOraria} + '€'">Tariffa</span>
         <span th:text="'Tutor: ' + ${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}">Tutor</span>
       </div>
-    </div>
+    </div> <!--alessandro il ciclo lo devi spostare in announcementsGrid.html -->
 
   </div>
 </div>
+<div th:replace="~{fragments/announcementsGrid :: announcementsGrid}"></div>
 
 </body>
 </html>

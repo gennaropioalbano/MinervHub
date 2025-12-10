@@ -17,6 +17,16 @@ public class AuthController {
     @Autowired
     private UtenteService utenteService;
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
     @GetMapping("/login")
     public String loginPage() {
         return "login";
@@ -32,13 +42,5 @@ public class AuthController {
     public String registerUtente(@ModelAttribute Utente utente) {
         utenteService.save(utente);
         return "redirect:/login";
-    }
-
-    @GetMapping("/home")
-    public String homePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        Utente utente = utenteService.findByEmail(userDetails.getUsername());
-        model.addAttribute("name", utente.getNome());
-        model.addAttribute("email", utente.getEmail());
-        return "home";
     }
 }

@@ -51,13 +51,13 @@ header {
 .right-section {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 }
 
 .loggato {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .fancy-border {
@@ -96,41 +96,34 @@ header {
 }
 
 .cover {
-    position: relative;
     height: 350px;
+    display: flex;
+    margin: 0 5%;
+    background-color: #ffffff;
+    border-radius: 20px;
     overflow: hidden;
+}
+
+.cover-text-container {
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 5%;
-    border-radius: 20px;
-}
-
-.cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.cover::after {
-    content: "";
-    position: absolute;
-    inset: 0; /* Equivalente a top:0, right:0, bottom:0, left:0 */
-    background-color: rgba(0, 0, 0, 0.3); /* Colore nero con 30% di opacità */
-    z-index: 1; /* Si posiziona sopra l'immagine */
+    padding-left: 30px;
 }
 
 .cover-text {
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    color: #ffffff;
-    font-size: 48px;
+    color: black;
+    font-size: 40px;
     font-weight: 700;
-    z-index: 10;
-
     margin: 0;
+}
+
+.cover img {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right;
 }
 
 .grid-wrapper {

@@ -11,13 +11,15 @@
 <body>
     <div th:replace="~{fragments/navbar :: navFragment}"></div>
     <div class="cover">
+        <div class="cover-text-container">
+            <h1 class="cover-text">
+                Trova
+                <br>
+                il tutor ideale
+            </h1>
+        </div>
+
         <img src="/images/cover.png" alt="">
-        <h1 class="cover-text">
-            Trova
-            <br>
-            il tutor ideale
-        </h1>
     </div>
-    <div th:replace="~{fragments/announcementsGrid :: announcementsGrid}"></div>
 </body>
 </html>
