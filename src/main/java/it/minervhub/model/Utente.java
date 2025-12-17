@@ -35,8 +35,6 @@ public class Utente {
     @Column(name = "corsoLaurea", length = 50)
     private String corsoLaurea;
 
-    public Utente(){}
-
     public Utente(LocalDate dataNascita, String nome, String cognome, String email, String password, String corsoLaurea) {
         this.dataNascita = dataNascita;
         this.nome = nome;

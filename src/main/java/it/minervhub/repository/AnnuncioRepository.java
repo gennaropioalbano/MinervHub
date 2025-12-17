@@ -1,6 +1,7 @@
 package it.minervhub.repository;
 
 import it.minervhub.model.Annuncio;
+import it.minervhub.model.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Repository
 public interface AnnuncioRepository extends JpaRepository<Annuncio, Long> {
+    List<Annuncio> findByAutore(Utente autore);
+
     List<Annuncio> findByDisponibileTrue();
 
     @Query("""

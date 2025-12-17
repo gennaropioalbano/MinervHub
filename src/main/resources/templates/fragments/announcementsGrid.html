@@ -1,40 +1,65 @@
-<div class="grid-wrapper" th:fragment="announcementsGrid">
-    <div class="grid">
-        <div class="card">
-            <h3>Annuncio 1</h3>
-            <div class="card-content">
-                <p class="price">
-                    <span class="price price--number">
-                        <span class="price price--dolar">$</span>
-                        10
-                    </span>
-                </p>
-                <span class="description">sono la descrizione dell'annuncio 1.</span>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="grid-wrapper" th:fragment="announcementsGrid(mostraBottone, isPersonal)">
+
+    <div class="grid-header" th:if="${mostraBottone}">
+        <a th:href="@{/annunci/create}" class="btn-action">
+            <i class="fa-solid fa-plus"></i> Crea nuovo annuncio
+        </a>
+    </div>
+
+    <div class="announcements-grid">
+
+        <div th:each="annuncio : ${annunci}" class="announcement-card-wrapper">
+
+            <a th:href="@{/annunci/detail/{id}(id=${annuncio.id})}" class="announcement-card">
+
+                <div class="card-top">
+                    <h3 th:text="${annuncio.titolo}">Titolo</h3>
+                    <div class="price-badge">
+                        <span th:text="${annuncio.tariffaOraria}">0</span>
+                        <span class="currency">€/h</span>
+                    </div>
+                </div>
+
+                <p class="card-description" th:text="${annuncio.descrizione}">Descrizione...</p>
+
+                <div class="card-divider"></div>
+
+                <div class="card-owner" th:if="${!isPersonal}">
+                    <div class="owner-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="owner-info">
+                        <span class="label">Tutor</span>
+                        <span class="name" th:text="${annuncio.autore?.nome} ?: 'Tutor'">Tutor</span>
+                    </div>
+                </div>
+
+                <div class="card-owner" th:if="${isPersonal}">
+                    <div class="owner-info">
+                        <span class="label" style="color: var(--color-card-green);">Il tuo annuncio</span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="card-actions" th:if="${isPersonal}">
+                <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-edit">
+                    <i class="fa-solid fa-pen"></i> Modifica
+                </a>
+                <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}"
+                   class="btn-delete"
+                   onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?')">
+                    <i class="fa-solid fa-trash"></i> Elimina
+                </a>
             </div>
-        </div>
-        <div class="card">
-            <h3>Annuncio 2</h3>
-            <div class="card-content">
-                <p class="price">
-                    <span class="price price--number">
-                        <span class="price price--dolar">$</span>
-                        10
-                    </span>
-                </p>
-                <span class="description">sono la descrizione dell'annuncio 2.</span>
-            </div>
-        </div>
-        <div class="card">
-            <h3>Annuncio 3</h3>
-            <div class="card-content">
-                <p class="price">
-                    <span class="price price--number">
-                        <span class="price price--dolar">$</span>
-                        10
-                    </span>
-                </p>
-                <span class="description">sono la descrizione dell'annuncio 3.</span>
-            </div>
-        </div>
+
+        </div> </div>
+
+    <div th:if="${annunci.empty}" style="text-align: center; color: #999; margin-top: 20px;">
+        <p>Non ci sono annunci da mostrare.</p>
     </div>
 </div>
+
+</body>
+</html>

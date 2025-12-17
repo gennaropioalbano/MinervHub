@@ -10,16 +10,61 @@
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navFragment}"></div>
-    <div class="cover">
-        <div class="cover-text-container">
-            <h1 class="cover-text">
-                Trova
-                <br>
-                il tutor ideale
-            </h1>
+
+    <section class="hero-section">
+        <div class="hero-content-container">
+            <div class="hero-text-block">
+                <h1>Le ripetizioni online che trasformano i tuoi voti</h1>
+                <p>Grazie ai tutor oltre il 96% degli studenti supera le proprie insufficienze e ritrova la voglia di studiare.</p>
+                <a th:href="@{/annunci}" class="btn-hero-pink">Trova il tuo tutor</a>
+            </div>
+            <div class="hero-spacer"></div>
+        </div>
+    </section>
+
+    <section class="steps-section">
+
+        <div class="section-intro">
+            <h2>Non il solito sito di ripetizioni</h2>
+            <p>
+                Dimentica i costi orari e i pagamenti. Qui la moneta è il tuo tempo.
+                Offri ripetizioni della tua materia forte per riceverne in quella dove hai difficoltà:
+                uno scambio equo che valorizza le competenze di tutti.
+            </p>
         </div>
 
-        <img src="/images/cover.png" alt="">
-    </div>
+        <div class="section-label">COME FUNZIONA</div>
+
+        <div class="steps-grid">
+            <article class="step-card card-pink">
+                <div class="card-content">
+                    <span class="step-number">1.</span>
+                    <h3>Trova il match perfetto</h3>
+                    <p>Cerca la materia che vuoi studiare (es. Analisi 1) e controlla nell'annuncio le "Materie accettate in scambio" per vedere se le tue competenze (es. Programmazione) interessano al tutor.</p>
+                </div>
+                <img src="/images/step1-search.png" alt="Tutor e studente" class="card-image">
+            </article>
+
+            <article class="step-card card-green">
+                <div class="card-content">
+                    <span class="step-number">2.</span>
+                    <h3>Proponi lo scambio</h3>
+                    <p>Hai trovato la corrispondenza giusta? Invia una richiesta proponendo le tue lezioni in cambio delle sue. Niente transazioni in denaro, solo uno scambio equo del vostro tempo.</p>
+                </div>
+                <img src="/images/step2-propose.png" alt="Ragazza che impara" class="card-image">
+            </article>
+
+            <article class="step-card card-yellow">
+                <div class="card-content">
+                    <span class="step-number">3.</span>
+                    <h3>Impara e Insegna</h3>
+                    <p>Accordo fatto! Iniziate le sessioni: tu ricevi aiuto per superare il tuo esame e ricambi insegnando la tua materia forte. Crescete insieme aiutandovi a vicenda.</p>
+                </div>
+                <img src="/images/step3-success.png" alt="Successo scolastico" class="card-image">
+            </article>
+        </div>
+    </section>
+
+    <div th:replace="~{fragments/footer :: footerFragment}"></div>
 </body>
 </html>

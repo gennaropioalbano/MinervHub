@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${annuncioDto.id != null} ? 'Modifica Annuncio' : 'Nuovo Annuncio'">Annuncio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto rounded border p-4 m-4">
+            <h2 class="text-center mb-5" th:text="${annuncioDto.id != null} ? 'Modifica Annuncio' : 'Nuovo Annuncio'">Nuovo Annuncio</h2>
+
+            <form th:action="${annuncioDto.id != null} ? @{'/annunci/edit/' + ${annuncioDto.id}} : @{/annunci/create}"
+                  method="post" th:object="${annuncioDto}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Titolo</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{titolo}">
+                        <p th:if="${#fields.hasErrors('titolo')}" th:errorclass="text-danger" th:errors="*{titolo}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Descrizione</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{descrizione}">
+                        <p th:if="${#fields.hasErrors('descrizione')}" th:errorclass="text-danger" th:errors="*{descrizione}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Esame</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{esame}">
+                        <p th:if="${#fields.hasErrors('esame')}" th:errorclass="text-danger" th:errors="*{esame}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Corso Laurea</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{corsoLaurea}">
+                        <p th:if="${#fields.hasErrors('corsoLaurea')}" th:errorclass="text-danger" th:errors="*{corsoLaurea}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Tariffa</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" min="5" th:field="*{tariffaOraria}">
+                        <p th:if="${#fields.hasErrors('tariffaOraria')}" th:errorclass="text-danger" th:errors="*{tariffaOraria}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Scambio</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{scambio}">
+                        <p th:if="${#fields.hasErrors('scambio')}" th:errorclass="text-danger" th:errors="*{scambio}"></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <button type="submit" class="btn btn-primary" th:text="${annuncioDto.id != null} ? 'Aggiorna' : 'Crea'">Crea</button>
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a class="btn btn-outline-primary" href="/annunci" role="button">Annulla</a>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

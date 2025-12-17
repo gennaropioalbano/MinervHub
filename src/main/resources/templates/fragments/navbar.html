@@ -1,32 +1,36 @@
 <header th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-    <div class="left-section">
-        <a th:href="@{/home}">
-            <img th:src="@{/images/logo.png}" alt="Logo">
-            <h1 class="logo">MinervHub</h1>
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <!-- Logo -->
+    <div class="nav-left">
+        <a th:href="@{/home}" class="logo-link">
+            <img th:src="@{/images/logo.png}" alt="Logo MinervHub" class="logo-img">
+            <span class="logo-text">MinervHub</span>
         </a>
     </div>
 
-    <ul class="nav-links">
-        <li class="user fancy-border">Bacheca</li>
-        <li class="class fancy-border">Dare lezioni</li>
-    </ul>
+    <!-- Menu principale -->
+    <div class="nav-center">
+        <ul class="nav-list">
+            <li class="nav-item"><a th:href="@{/annunci}" class="nav-link">Bacheca</a></li>
+            <li class="nav-item"><a th:href="@{/annunci/miei}" class="nav-link">I miei annunci</a></li>
+        </ul>
+    </div>
 
-    <div class="right-section">
+    <div class="nav-right">
         <div sec:authorize="!isAuthenticated()">
-            <a class="user fancy-border" th:href="@{/login}">
-                <i class="fa-solid fa-user"></i>
+            <a  th:href="@{/login}" class="nav-user">
+                <i class="fa-solid fa-user"></i> Login
             </a>
         </div>
 
-        <div class="loggato" sec:authorize="isAuthenticated()">
-            <a class="user fancy-border">
+        <div sec:authorize="isAuthenticated()" class="nav-logged-in">
+            <span class="nav-user">
                 <i class="fa-solid fa-user"></i>
-            </a>
-
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="user fancy-border esc"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                <span th.text="&{#authentication.name}">Utente</span>
+            </span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn-logout" title="Esci"></button>
             </form>
         </div>
     </div>

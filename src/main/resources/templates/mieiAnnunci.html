@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I Miei Annunci | MinervHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<header th:replace="~{fragments/navbar :: navFragment}"></header>
+
+<div class="section-intro" style="text-align: center; margin-top: 40px;">
+    <h2>Gestione Annunci</h2>
+    <p>Qui puoi vedere, modificare ed eliminare le tue offerte di scambio.</p>
+</div>
+
+<div th:replace="~{fragments/announcementsGrid :: announcementsGrid(mostraBottone=true, isPersonal=true)}"></div>
+
+<div th:replace="~{fragments/footer :: footerFragment}"></div>
+</body>
+</html>
