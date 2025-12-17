@@ -1,10 +1,15 @@
 package it.minervhub.service;
 
 import it.minervhub.model.Annuncio;
+import it.minervhub.model.AnnuncioDto;
+import it.minervhub.model.Utente;
 import it.minervhub.repository.AnnuncioRepository;
+import it.minervhub.repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,29 +19,102 @@ public class AnnuncioService {
     @Autowired
     private AnnuncioRepository annuncioRepository;
 
-    public AnnuncioService(AnnuncioRepository annuncioRepository) {
-        this.annuncioRepository = annuncioRepository;
+    @Autowired
+    private UtenteRepository utenteRepository;
+
+    // Recupera tutti gli annunci ordinati per ID decrescente
+    public List<Annuncio> findAll() {
+        return annuncioRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public List<Annuncio> getAnnunciDisponibili(){
-        return annuncioRepository.findByDisponibileTrue();
+    // Recupera un singolo annuncio (ritorna Optional per gestire null safe)
+    public Optional<Annuncio> findById(Long id) {
+        return annuncioRepository.findById(id);
     }
 
-    public Annuncio getAnnuncioById(Long id){
-        Optional<Annuncio> annuncio = annuncioRepository.findById(id);
-        return annuncio.orElse(null);
+    // Recupera gli annunci di uno specifico utente (tramite email)
+    public List<Annuncio> findByAutoreEmail(String email) {
+        Utente utente = utenteRepository.findByEmail(email);
+        if (utente == null) {
+            return List.of(); // Ritorna lista vuota se utente non trovato
+        }
+        return annuncioRepository.findByAutore(utente);
     }
 
-    public void addAnnucio(Annuncio annuncio){
+    // CREAZIONE ANNUNCIO: Logica di conversione e assegnazione autore
+    public void createAnnuncio(AnnuncioDto dto, String userEmail) {
+        Annuncio annuncio = new Annuncio();
+        mapDtoToEntity(dto, annuncio); // Metodo helper privato (vedi sotto)
+
+        annuncio.setDisponibile(true);
+
+        // Associa l'autore recuperandolo dall'email
+        Utente autore = utenteRepository.findByEmail(userEmail);
+        annuncio.setAutore(autore);
+
         annuncioRepository.save(annuncio);
     }
 
-    public void updateAnnuncio(Long id, Annuncio annuncio){
+    // MODIFICA ANNUNCIO: Aggiorna solo se esiste
+    public boolean updateAnnuncio(Long id, AnnuncioDto dto) {
+        Optional<Annuncio> annuncioOpt = annuncioRepository.findById(id);
+
+        if (annuncioOpt.isEmpty()) {
+            return false; // Annuncio non trovato
+        }
+
+        Annuncio annuncio = annuncioOpt.get();
+
+        // Aggiorniamo i campi usando lo stesso helper
+        mapDtoToEntity(dto, annuncio);
+
+        // Nota: Non cambiamo l'autore e non cambiamo "disponibile" qui se non richiesto
         annuncioRepository.save(annuncio);
+        return true;
     }
 
-    public void disabilitaAnnuncio(Long id){
-        Annuncio annuncio = annuncioRepository.findById(id).get();
-        annuncio.setDisponibile(false);
+    // CANCELLAZIONE
+    public void deleteAnnuncio(Long id) {
+        if (annuncioRepository.existsById(id)) {
+            annuncioRepository.deleteById(id);
+        }
+    }
+
+    // --- METODI DI UTILITÀ (HELPER) ---
+
+    // Converte l'Entità in DTO (utile per pre-popolare il form di Modifica)
+    public AnnuncioDto mapEntityToDto(Annuncio annuncio) {
+        AnnuncioDto dto = new AnnuncioDto();
+        dto.setTitolo(annuncio.getTitolo());
+        dto.setDescrizione(annuncio.getDescrizione());
+        dto.setEsame(annuncio.getEsame());
+        dto.setCorsoLaurea(annuncio.getCorsoLaurea());
+        dto.setTariffaOraria(annuncio.getTariffaOraria());
+
+        // Converte la lista di stringhe in una stringa unica separata da virgole
+        if (annuncio.getScambio() != null && !annuncio.getScambio().isEmpty()) {
+            dto.setScambio(String.join(", ", annuncio.getScambio()));
+        }
+        return dto;
+    }
+
+    // Converte il DTO in Entità (logica comune per Create e Edit)
+    private void mapDtoToEntity(AnnuncioDto dto, Annuncio annuncio) {
+        annuncio.setTitolo(dto.getTitolo());
+        annuncio.setDescrizione(dto.getDescrizione());
+        annuncio.setEsame(dto.getEsame());
+        annuncio.setCorsoLaurea(dto.getCorsoLaurea());
+        annuncio.setTariffaOraria(dto.getTariffaOraria());
+
+        // Logica split stringa -> lista
+        if (dto.getScambio() != null && !dto.getScambio().isBlank()) {
+            List<String> listaScambi = Arrays.stream(dto.getScambio().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .toList();
+            annuncio.setScambio(listaScambi);
+        } else {
+            annuncio.setScambio(null);
+        }
     }
 }
