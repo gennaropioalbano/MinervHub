@@ -1,10 +1,12 @@
 package it.minervhub.controller;
 
+import org.springframework.ui.Model;
 import it.minervhub.model.InviaRichiestaDTO;
 import it.minervhub.service.RichiestaContattoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,5 +68,16 @@ public class RichiestaContattoController {
         }
 
         return redirectUrl;
+    }
+
+    @GetMapping("/inviate")
+    public String visualizzaRichiesteInviate(Model model, Principal principal) {
+        // Recupera le richieste usando il Service che hai già creato
+        var richieste = richiestaContattoService.findRichiesteInviate(principal.getName());
+
+        // Passa la lista alla pagina HTML
+        model.addAttribute("richieste", richieste);
+
+        return "richieste-inviate"; // Questo deve essere il nome del file HTML qui sotto
     }
 }
