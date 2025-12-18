@@ -1,0 +1,213 @@
+/* --- ANNOUNCEMENTS --- */
+.announcements {
+    padding: 50px 5%;
+}
+
+/* Header */
+.announcements__header {
+    margin-bottom: 30px;
+}
+
+.announcements__create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background-color: var(--color-card-pink);
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(21, 96, 130, 0.2);
+    color: #ffffff;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.announcements__create-btn:hover {
+    background-color: var(--color-card-green);
+    box-shadow: 0 6px 15px rgba(21, 96, 130, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Grid */
+.announcements__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Empty State */
+.announcements__empty {
+    color: #999999;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* --- CARD --- */
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card__link {
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.card__link:hover {
+    border-color: transparent;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-7px);
+}
+
+/* Header */
+.card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.card__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    flex: 1;
+    margin: 0;
+    color: #156082;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+}
+
+.card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    padding: 8px 12px;
+    background-color: #eef6f9;
+    border-radius: 12px;
+    color: #156082;
+    font-size: 22px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.card__currency {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Description */
+.card__description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    flex-grow: 1;
+    margin-bottom: 20px;
+    color: #555555;
+    font-size: 15px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+}
+
+/* Divider */
+.card__divider {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 15px;
+    background-color: #f0f0f0;
+}
+
+/* Owner */
+.card__owner-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card__owner-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    color: #999999;
+    font-size: 18px;
+}
+
+.card__owner-label {
+    display: block;
+    color: #999999;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card__owner-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.card__owner-badge {
+    color: var(--color-card-green);
+    font-weight: 700;
+}
+
+/* Actions */
+.card__actions {
+    display: flex;
+    gap: 10px;
+}
+
+.card__btn {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.2s ease;
+}
+
+.card__btn--edit {
+    background-color: #e0f2f1;
+    color: #00695c;
+}
+
+.card__btn--edit:hover {
+    background-color: #b2dfdb;
+}
+
+.card__btn--delete {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.card__btn--delete:hover {
+    background-color: #ffcdd2;
+}

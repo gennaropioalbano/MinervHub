@@ -2,34 +2,39 @@
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <!-- Logo -->
-    <div class="nav-left">
-        <a th:href="@{/home}" class="logo-link">
-            <span class="logo-text">MinervHub</span>
-        </a>
-    </div>
+    <a th:href="@{/home}" class="header__logo">
+        <span class="header__logo-text">MinervHub</span>
+    </a>
 
-    <!-- Menu principale -->
-    <div class="nav-center">
-        <ul class="nav-list">
-            <li class="nav-item"><a th:href="@{/bacheca}" class="nav-link">Bacheca</a></li>
-            <li class="nav-item"><a th:href="@{/annunci/miei}" class="nav-link">I miei annunci</a></li>
-            <li class="nav-item"><a th:href="@{/richieste/inviate}" class="nav-link">Le mie richieste</a></li>
+    <!-- Navigation -->
+    <div class="header__nav">
+        <ul class="header__nav-list">
+            <li class="header__nav-item">
+                <a th:href="@{/bacheca}" class="header__nav-link">Bacheca</a>
+            </li>
+            <li class="header__nav-item">
+                <a th:href="@{/annunci/miei}" class="header__nav-link">I miei annunci</a>
+            </li>
+            <li class="header__nav-item">
+                <a th:href="@{/richieste/inviate}" class="header__nav-link">Le mie richieste</a>
+            </li>
         </ul>
     </div>
 
-    <div class="nav-right">
-        <div sec:authorize="!isAuthenticated()">
-            <a  th:href="@{/login}" class="nav-user">
-                Login
-            </a>
-        </div>
+    <!-- User Actions -->
+    <div class="header__actions">
+        <!-- Not Authenticated -->
+        <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="header__login">
+            Login
+        </a>
 
-        <div sec:authorize="isAuthenticated()" class="nav-logged-in">
-    <span class="nav-user">
-        Ciao, <span sec:authentication="name">Utente</span>
-    </span>
-            <form th:action="@{/logout}" method="post" class="logout-form">
-                <button type="submit" class="btn-logout" title="Esci">Esci</button>
+        <!-- Authenticated -->
+        <div sec:authorize="isAuthenticated()" class="header__user">
+            <span>
+                Ciao, <span sec:authentication="name">Utente</span>
+            </span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="header__logout">Esci</button>
             </form>
         </div>
     </div>

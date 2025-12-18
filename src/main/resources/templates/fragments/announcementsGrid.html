@@ -1,50 +1,42 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
+<div th:fragment="announcementsGrid(mostraBottone, isPersonal)" class="announcements">
 
-<div class="grid-wrapper" th:fragment="announcementsGrid(mostraBottone, isPersonal)">
-
-    <div class="grid-header" th:if="${mostraBottone}">
-        <a th:href="@{/annunci/create}" class="btn-action">
+    <div th:if="${mostraBottone}" class="announcements__header" >
+        <a th:href="@{/annunci/create}" class="annoucements__create-btn">
             <i class="fa-solid fa-plus"></i> Crea nuovo annuncio
         </a>
     </div>
 
-    <div class="announcements-grid">
-
-        <div th:each="annuncio : ${annunci}" class="announcement-card-wrapper">
-
-            <a th:href="@{/bacheca/{id}(id=${annuncio.id})}" class="announcement-card">
-
-                <div class="card-top">
-                    <h3 th:text="${annuncio.titolo}">Titolo</h3>
-                    <div class="price-badge">
+    <div class="announcements__grid">
+        <article th:each="annuncio : ${annunci}" class="card">
+            <a th:href="@{/bacheca/{id}(id=${annuncio.id})}" class="card__link">
+                <div class="card__header">
+                    <h3 class="card__title" th:text="${annuncio.titolo}">Titolo</h3>
+                    <div class="card__price">
                         <span th:text="${annuncio.tariffaOraria}">0</span>
-                        <span class="currency">€/h</span>
+                        <span class="card__currency">€/h</span>
                     </div>
                 </div>
 
-                <p class="card-description" th:text="${annuncio.descrizione}">Descrizione...</p>
+                <p class="card__description" th:text="${annuncio.descrizione}">Descrizione...</p>
 
-                <div class="card-divider"></div>
+                <div class="card__divider"></div>
 
-                <div class="card-owner" th:if="${!isPersonal}">
-                    <div class="owner-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div class="owner-info">
-                        <span class="label">Tutor</span>
-                        <span class="name" th:text="${annuncio.autore?.nome} ?: 'Tutor'">Tutor</span>
+                <div class="card__owner">
+                    <div th:if="${!isPersonal}" class="card__owner-info">
+                        <div class="card__owner-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <span class="card__owner-label">Tutor</span>
+                            <span class="card__owner-name" th:text="${annuncio.autore?.nome} ?: 'Tutor'">Tutor</span>
+                        </div>
                     </div>
-                </div>
-
-                <div class="card-owner" th:if="${isPersonal}">
-                    <div class="owner-info">
-                        <span class="label" style="color: var(--color-card-green);">Il tuo annuncio</span>
-                    </div>
+                    <span th:if="${isPersonal}" class="card__owner-badge">Il tuo annuncio</span>
                 </div>
             </a>
 
-            <div class="card-actions" th:if="${isPersonal}">
-                <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-edit">
+            <div th:if="${isPersonal}" class="card__actions">
+                <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="card__btn card__btn--edit">
                     <i class="fa-solid fa-pen"></i> Modifica
                 </a>
                 <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}"
@@ -53,13 +45,11 @@
                     <i class="fa-solid fa-trash"></i> Elimina
                 </a>
             </div>
-
-        </div> </div>
-
-    <div th:if="${annunci.empty}" style="text-align: center; color: #999; margin-top: 20px;">
-        <p>Non ci sono annunci da mostrare.</p>
+        </article>
     </div>
-</div>
 
-</body>
-</html>
+    <p th:if="${annunci.empty}" class="announcement__empty">
+        Non ci sono annunci da mostrare.
+    </p>
+
+</div>

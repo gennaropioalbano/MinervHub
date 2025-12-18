@@ -7,10 +7,46 @@
 }
 
 :root {
+    --color-white: #ffffff;
+    --color-black: #000000;
+
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e5e5e5;
+    --color-gray-300: #cccccc;
+    --color-gray-400: #999999;
+    --color-gray-500: #666666;
+    --color-gray-600: #444444;
+    --color-gray-700: #2b2b2b;
+
     --color-card-pink: #156082;
     --color-card-green: #3b7b8f;
     --color-card-yellow: #2d6d8b;
     --color-text-main: #000000;
+
+    --color-primary: #156082;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #1e40af;
+
+    --color-secondary: #22c55e;
+    --color-secondary-light: #4ade80;
+    --color-secondary-dark: #15803d;
+
+    --color-success: #16a34a;
+    --color-warning: #facc15;
+    --color-error: #dc2626;
+    --color-info: #0ea5e9;
+
+    --text-primary: var(--color-gray-700);
+    --text-secondary: var(--color-gray-500);
+    --text-muted: var(--color-gray-400);
+    --text-inverse: var(--color-white);
+
+    --bg-page: var(--color-gray-100);
+    --bg-surface: var(--color-white);
+    --bg-muted: var(--color-gray-200);
+
+    --border-default: var(--color-gray-300);
+    --border-focus: var(--color-primary);
 }
 
 body {
@@ -139,81 +175,6 @@ li, a, button {
     }
 }
 
-/* --- NAVBAR --- */
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30px 5%;
-}
-
-.nav-left .logo-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 22px;
-    color: #156082;
-}
-
-.logo-img {
-    height: 40px;
-    width: 40px;
-    object-fit: contain;
-}
-
-.nav-center .nav-list {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-}
-
-.nav-link {
-    position: relative;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: normal;
-    color: #000000;
-    transition: all 0.2s ease;
-}
-
-.nav-link:hover {
-    background-color: #156082;
-    color: white;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.nav-user {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-weight: bold;
-    color: #156082;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.nav-logged-in {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.btn-logout {
-    background: none;
-    border: none;
-
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-}
-
 /* --- SEZIONE STEPS --- */
 
 .steps-section {
@@ -326,239 +287,6 @@ header {
     margin-top: auto;
     object-fit: contain;
     object-position: bottom center;
-}
-
-/* --- SEZIONE ANNUNCI --- */
-
-.grid-wrapper {
-    padding: 50px 5%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Header sopra la griglia per il bottone */
-.grid-header {
-    width: 100%;
-    padding: 0 5%;
-    display: flex;
-    margin-bottom: 30px;
-}
-
-.btn-action {
-    background-color: var(--color-card-pink);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(21, 96, 130, 0.2);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-action:hover {
-    background-color: var(--color-card-green);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(21, 96, 130, 0.3);
-    color: white;
-}
-
-/* Griglia layout */
-.announcements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-    width: 100%;
-    padding: 0 5%;
-}
-
-/* Stile Card Annuncio */
-.announcement-card {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 280px; /* Altezza minima uniforme */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.05);
-    text-decoration: none; /* Rimuove sottolineatura link */
-    color: inherit;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Effetto Hover (simile alla Home) */
-.announcement-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border-color: transparent;
-}
-
-/* Top della card: Titolo e Prezzo */
-.card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-    gap: 15px;
-}
-
-.announcement-card h3 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #156082;
-    margin: 0;
-    line-height: 1.4;
-    flex: 1; /* Prende lo spazio disponibile */
-
-    /* Regole per limitare a 2 righe */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;       /* NUMERO MASSIMO DI RIGHE */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Badge Prezzo */
-.price-badge {
-    background-color: #eef6f9; /* Sfondo chiarissimo del colore principale */
-    color: #156082;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 22px;
-    white-space: nowrap;
-    display: flex;
-    align-items: baseline;
-    gap: 2px;
-}
-
-.price-badge .currency {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-/* Descrizione */
-.card-description {
-    color: #555;
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    flex-grow: 1;
-
-    /* Tronca il testo dopo 3 righe se troppo lungo */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Divisore sottile */
-.card-divider {
-    height: 1px;
-    background-color: #f0f0f0;
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-/* Footer Card: Utente */
-.card-owner {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.owner-avatar {
-    width: 40px;
-    height: 40px;
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 18px;
-}
-
-.owner-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.owner-info .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    color: #999;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.owner-info .name {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-
-    /* Regole per limitare a 1 riga */
-    display: -webkit-box;
-    -webkit-line-clamp: 1;       /* NUMERO MASSIMO DI RIGHE */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
-}
-
-.announcement-card-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Contenitore dei bottoni Modifica/Elimina */
-.card-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-}
-
-/* Stile base per entrambi i bottoni */
-.btn-edit, .btn-delete {
-    flex: 1; /* Si dividono lo spazio 50% e 50% */
-    padding: 10px;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* Spazio tra icona e testo */
-}
-
-/* Colori Bottone Modifica (Verde Acqua) */
-.btn-edit {
-    background-color: #e0f2f1;
-    color: #00695c;
-}
-
-.btn-edit:hover {
-    background-color: #b2dfdb;
-}
-
-/* Colori Bottone Elimina (Rosso Chiaro) */
-.btn-delete {
-    background-color: #ffebee;
-    color: #c62828;
-}
-
-.btn-delete:hover {
-    background-color: #ffcdd2;
 }
 
 /* --- PAGINA DETTAGLIO ANNUNCIO --- */

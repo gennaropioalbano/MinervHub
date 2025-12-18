@@ -1,0 +1,62 @@
+/* --- HEADER --- */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 5%;
+}
+
+/* Logo */
+.header__logo {
+    color: var(--color-primary);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Navigation */
+.header__nav-list {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+.header__nav-link {
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: #000000;
+    transition: all 0.2s ease;
+}
+
+.header__nav-link:hover {
+    background-color: #156082;
+    color: #ffffff;
+}
+
+/* User Actions */
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header__login,
+.header__user {
+    color: #156082;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.header__user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header__logout {
+    background: none;
+    border: none;
+    color: #156082;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+}
