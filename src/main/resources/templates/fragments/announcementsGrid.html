@@ -14,7 +14,7 @@
 
         <div th:each="annuncio : ${annunci}" class="announcement-card-wrapper">
 
-            <a th:href="@{/annunci/detail/{id}(id=${annuncio.id})}" class="announcement-card">
+            <a th:href="@{/bacheca/{id}(id=${annuncio.id})}" class="announcement-card">
 
                 <div class="card-top">
                     <h3 th:text="${annuncio.titolo}">Titolo</h3>

@@ -11,9 +11,9 @@
 <header th:replace="fragments/navbar :: navFragment"></header>
 
 <form action="#" method="get" style="margin-bottom: 30px; text-align:center;">
-  <input type="text" name="corsoLaurea" placeholder="Corso di laurea">
-  <input type="text" name="esame" placeholder="Esame">
-  <input type="number" name="tariffaMax" placeholder="Tariffa massima">
+  <input type="text" name="corsoLaurea" placeholder="Corso di laurea" th:value="${param.corsoLaurea}">
+  <input type="text" name="esame" placeholder="Esame" th:value="${param.esame}">
+  <input type="number" name="tariffaMax" placeholder="Tariffa massima" th:value="${param.tariffaMax}">
   <button type="submit" class="fancy-border">Filtra</button>
 </form>
 
