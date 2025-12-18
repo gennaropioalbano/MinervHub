@@ -194,6 +194,12 @@ header {
     font-weight: 500;
 }
 
+.nav-logged-in {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .btn-logout {
     background: none;
     border: none;

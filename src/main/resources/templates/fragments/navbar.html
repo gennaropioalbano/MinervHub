@@ -20,17 +20,16 @@
     <div class="nav-right">
         <div sec:authorize="!isAuthenticated()">
             <a  th:href="@{/login}" class="nav-user">
-                <i class="fa-solid fa-user"></i> Login
+                Login
             </a>
         </div>
 
         <div sec:authorize="isAuthenticated()" class="nav-logged-in">
             <span class="nav-user">
-                <i class="fa-solid fa-user"></i>
                 <span th.text="&{#authentication.name}">Utente</span>
             </span>
             <form th:action="@{/logout}" method="post" class="logout-form">
-                <button type="submit" class="btn-logout" title="Esci"></button>
+                <button type="submit" class="btn-logout" title="Esci">Esci</button>
             </form>
         </div>
     </div>
