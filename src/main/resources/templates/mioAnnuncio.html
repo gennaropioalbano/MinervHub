@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${annuncio.titolo} + ' | MinervHub'">Dettaglio Annuncio</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header th:replace="~{fragments/navbar :: navFragment}"></header>
+
+<main class="detail-container">
+
+  <section class="announcement-main">
+
+    <div class="announcement-image-box">
+      <img src="https://placehold.co/800x400/4f46e5/white?text=MinervHub+Annuncio" alt="Anteprima" class="detail-img">
+    </div>
+
+    <div class="announcement-header">
+      <div class="title-row">
+        <h1 th:text="${annuncio.titolo}">Titolo Annuncio</h1>
+
+        <span class="detail-price" th:if="${annuncio.tariffaOraria != null}"
+              th:text="'€ ' + ${annuncio.tariffaOraria}">€ 0</span>
+      </div>
+
+      <div class="meta-row">
+                <span class="category-tag">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span th:text="${annuncio.corsoLaurea}">Corso</span>
+                </span>
+
+        <span class="category-tag" th:if="${annuncio.esame != null and !annuncio.esame.isEmpty()}">
+                    <i class="fa-solid fa-book"></i>
+                    <span th:text="${annuncio.esame}">Esame</span>
+                </span>
+
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="announcement-description">
+      <h3>Descrizione</h3>
+      <p th:text="${annuncio.descrizione}">
+        Descrizione non disponibile.
+      </p>
+
+      <div th:if="${annuncio.scambio != null and !annuncio.scambio.isEmpty()}">
+        <h4>Disponibile per scambio con:</h4>
+        <ul>
+          <li th:each="item : ${annuncio.scambio}" th:text="${item}">Oggetto</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="owner-actions" th:if="${annuncio.autore.email == currentUsername}" style="margin-top: 2rem;">
+      <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b; display:inline-block; width:auto; padding: 0.5rem 1rem;">
+        <i class="fa-solid fa-pen"></i> Modifica
+      </a>
+      <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444; display:inline-block; width:auto; padding: 0.5rem 1rem;"
+         onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?');">
+        <i class="fa-solid fa-trash"></i> Elimina
+      </a>
+    </div>
+
+  </section>
+
+
+  <aside class="publisher-sidebar">
+    <div class="publisher-card">
+      <h3>Pubblicato da</h3>
+
+      <div class="publisher-info">
+        <img th:src="@{'https://ui-avatars.com/api/?name=' + ${annuncio.autore.nome} + '+' + ${annuncio.autore.cognome} + '&background=random'}"
+             alt="Avatar" class="publisher-avatar">
+
+        <div class="publisher-text">
+          <p class="publisher-name" th:text="${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}">Nome Utente</p>
+          <p class="publisher-rating" style="font-size: 0.85rem; color: #6b7280;">
+            <i class="fa-regular fa-envelope"></i> <span th:text="${annuncio.autore.email}">email@esempio.com</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <a th:href="'mailto:' + ${annuncio.autore.email} + '?subject=Info Annuncio: ' + ${annuncio.titolo}"
+           class="btn-primary full-width" style="text-decoration: none;">
+          <i class="fa-regular fa-envelope"></i> Contatta via Email
+        </a>
+
+        <button type="button" class="btn-secondary full-width" id="btnInviaRichiesta" style="margin-bottom: 0.5rem;">
+          <i class="fa-solid fa-paper-plane"></i> Invia Richiesta
+        </button>
+      </div>
+
+      <div class="safety-tips">
+        <i class="fa-solid fa-shield-halved"></i>
+        <small>Consiglio: Scambia a mano in università o in biblioteca.</small>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footerFragment}"></div>
+
+</body>
+</html>

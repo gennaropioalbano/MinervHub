@@ -16,15 +16,16 @@ public interface AnnuncioRepository extends JpaRepository<Annuncio, Long> {
     List<Annuncio> findByDisponibileTrue();
 
     @Query("""
-        SELECT a FROM Annuncio a
-        WHERE a.disponibile = true
-        AND (:corsoLaurea IS NULL OR a.corsoLaurea = :corsoLaurea)
-        AND (:esame IS NULL OR a.esame = :esame)
-        AND (:tariffaMax IS NULL OR a.tariffaOraria <= :tariffaMax)
-    """)
+    SELECT a FROM Annuncio a
+    WHERE a.disponibile = true
+    AND (:corsoLaurea IS NULL OR a.corsoLaurea = :corsoLaurea)
+    AND (:esame IS NULL OR a.esame = :esame)
+    AND (:tariffaMax IS NULL OR a.tariffaOraria <= :tariffaMax)
+""")
     List<Annuncio> filtraAnnunci(
             @Param("corsoLaurea") String corsoLaurea,
             @Param("esame") String esame,
             @Param("tariffaMax") Integer tariffaMax
     );
+
 }
