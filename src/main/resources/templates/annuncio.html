@@ -91,9 +91,12 @@
                     <i class="fa-regular fa-envelope"></i> Contatta via Email
                 </a>
 
-                <button type="button" class="btn-secondary full-width" id="btnInviaRichiesta" style="margin-bottom: 0.5rem;">
+                <a th:href="@{/inviaRichiesta(annuncioId=${annuncio.id})}"
+                   class="btn-secondary full-width"
+                   style="margin-bottom: 0.5rem; text-decoration: none; display: inline-block;">
                     <i class="fa-solid fa-paper-plane"></i> Invia Richiesta
-                </button>
+                </a>
+
             </div>
 
             <div class="safety-tips">

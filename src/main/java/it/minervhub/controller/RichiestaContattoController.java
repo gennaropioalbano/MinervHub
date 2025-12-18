@@ -2,11 +2,11 @@ package it.minervhub.controller;
 
 import it.minervhub.repository.RichiestaContattoRepository;
 import it.minervhub.service.RichiestaContattoService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/v1/richieste")
+@Controller
 public class RichiestaContattoController {
 
     private final RichiestaContattoService richiestaContattoService;
@@ -14,4 +14,14 @@ public class RichiestaContattoController {
     public RichiestaContattoController(RichiestaContattoService richiestaContattoService) {
         this.richiestaContattoService = richiestaContattoService;
     }
+
+    @GetMapping("/inviaRichiesta")
+    public String invioRichiestaContatto(
+            @RequestParam("annuncioId") Long annuncioId,
+            Model model
+    ) {
+        // TODO
+        return "inviaRichiesta";
+    }
+
 }
