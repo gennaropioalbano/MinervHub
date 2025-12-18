@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="${annuncio.titolo} + ' | MinervHub'">Dettaglio Annuncio</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* Sfondo scuro per il modale */
+        .modal-overlay {
+            display: none; /* Nascosto di default */
+            position: fixed;
+            z-index: 9999; /* Sopra a tutto */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Contenuto del modale */
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s;
+        }
+
+        /* Bottone X di chiusura */
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: #000; }
+
+        /* Area di testo */
+        .modal-textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
 </head>
 <body>
 
@@ -12,31 +69,27 @@
 
 <main class="detail-container">
 
-    <section class="announcement-main">
+    <div th:if="${successMessage}" style="background:#d1fae5; color:#065f46; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
+        <i class="fa-solid fa-check-circle"></i> <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
+        <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
+    </div>
 
+    <section class="announcement-main">
         <div class="announcement-image-box">
             <img src="https://placehold.co/800x400/4f46e5/white?text=MinervHub+Annuncio" alt="Anteprima" class="detail-img">
         </div>
 
         <div class="announcement-header">
             <div class="title-row">
-                <h1 th:text="${annuncio.titolo}">Titolo Annuncio</h1>
-
+                <h1 th:text="${annuncio.titolo}">Titolo</h1>
                 <span class="detail-price" th:if="${annuncio.tariffaOraria != null}"
                       th:text="'€ ' + ${annuncio.tariffaOraria}">€ 0</span>
             </div>
-
             <div class="meta-row">
-                <span class="category-tag">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                    <span th:text="${annuncio.corsoLaurea}">Corso</span>
-                </span>
-
-                <span class="category-tag" th:if="${annuncio.esame != null and !annuncio.esame.isEmpty()}">
-                    <i class="fa-solid fa-book"></i>
-                    <span th:text="${annuncio.esame}">Esame</span>
-                </span>
-
+                <span class="category-tag"><i class="fa-solid fa-graduation-cap"></i> <span th:text="${annuncio.corsoLaurea}">Corso</span></span>
+                <span class="category-tag" th:if="${annuncio.esame}"><i class="fa-solid fa-book"></i> <span th:text="${annuncio.esame}">Esame</span></span>
             </div>
         </div>
 
@@ -44,61 +97,60 @@
 
         <div class="announcement-description">
             <h3>Descrizione</h3>
-            <p th:text="${annuncio.descrizione}">
-                Descrizione non disponibile.
-            </p>
-
-            <div th:if="${annuncio.scambio != null and !annuncio.scambio.isEmpty()}">
-                <h4>Disponibile per scambio con:</h4>
-                <ul>
-                    <li th:each="item : ${annuncio.scambio}" th:text="${item}">Oggetto</li>
-                </ul>
-            </div>
+            <p th:text="${annuncio.descrizione}">Descrizione...</p>
         </div>
 
-        <div class="owner-actions" th:if="${annuncio.autore.email == currentUsername}" style="margin-top: 2rem;">
-            <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b; display:inline-block; width:auto; padding: 0.5rem 1rem;">
+        <div class="owner-actions" sec:authorize="isAuthenticated()"
+             th:if="${annuncio.autore.email == #authentication.name}"
+             style="margin-top: 2rem;">
+            <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b;">
                 <i class="fa-solid fa-pen"></i> Modifica
             </a>
-            <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444; display:inline-block; width:auto; padding: 0.5rem 1rem;"
-               onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?');">
+            <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444;"
+               onclick="return confirm('Sei sicuro?');">
                 <i class="fa-solid fa-trash"></i> Elimina
             </a>
         </div>
-
     </section>
-
 
     <aside class="publisher-sidebar">
         <div class="publisher-card">
             <h3>Pubblicato da</h3>
-
             <div class="publisher-info">
-                <img th:src="@{'https://ui-avatars.com/api/?name=' + ${annuncio.autore.nome} + '+' + ${annuncio.autore.cognome} + '&background=random'}"
-                     alt="Avatar" class="publisher-avatar">
-
+                <img th:src="@{'https://ui-avatars.com/api/?name=' + ${annuncio.autore.nome} + '+' + ${annuncio.autore.cognome}}" class="publisher-avatar">
                 <div class="publisher-text">
-                    <p class="publisher-name" th:text="${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}">Nome Utente</p>
-                    <p class="publisher-rating" style="font-size: 0.85rem; color: #6b7280;">
-                        <i class="fa-regular fa-envelope"></i> <span th:text="${annuncio.autore.email}">email@esempio.com</span>
-                    </p>
+                    <p class="publisher-name" th:text="${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}"></p>
+                    <small th:text="${annuncio.autore.email}"></small>
                 </div>
             </div>
 
             <div class="contact-actions">
-                <a th:href="'mailto:' + ${annuncio.autore.email} + '?subject=Info Annuncio: ' + ${annuncio.titolo}"
-                   class="btn-primary full-width" style="text-decoration: none;">
+                <a th:href="'mailto:' + ${annuncio.autore.email}" class="btn-primary full-width" style="margin-bottom: 0.5rem;">
                     <i class="fa-regular fa-envelope"></i> Contatta via Email
                 </a>
 
-                <button type="button" class="btn-secondary full-width" id="btnInviaRichiesta" style="margin-bottom: 0.5rem;">
-                    <i class="fa-solid fa-paper-plane"></i> Invia Richiesta
-                </button>
+                <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn-secondary full-width" style="text-align:center; text-decoration:none; display:block;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Accedi per contattare
+                </a>
+
+                <div sec:authorize="isAuthenticated()">
+
+                    <div th:if="${annuncio.autore.email == #authentication.name}" style="text-align:center; color:#666; font-size:0.9rem;">
+                        <small>Questo è il tuo annuncio</small>
+                    </div>
+
+                    <button th:unless="${annuncio.autore.email == #authentication.name}"
+                            type="button"
+                            class="btn-secondary full-width"
+                            id="btnApriModale">
+                        <i class="fa-solid fa-paper-plane"></i> Invia Richiesta
+                    </button>
+                </div>
             </div>
 
             <div class="safety-tips">
                 <i class="fa-solid fa-shield-halved"></i>
-                <small>Consiglio: Scambia a mano in università o in biblioteca.</small>
+                <small>Consiglio: Scambia a mano in università.</small>
             </div>
         </div>
     </aside>
@@ -106,6 +158,57 @@
 </main>
 
 <div th:replace="~{fragments/footer :: footerFragment}"></div>
+
+<div id="requestModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-btn" id="btnClose">&times;</span>
+        <h3 style="margin-top:0;">Contatta il Tutor</h3>
+        <p>Scrivi un messaggio per presentarti.</p>
+
+        <form th:action="@{/richieste/invia}" method="post">
+            <input type="hidden" name="idAnnuncio" th:value="${annuncio.id}">
+
+            <textarea name="messaggio" class="modal-textarea" rows="4"
+                      placeholder="Ciao, sono interessato alle tue lezioni..." required></textarea>
+
+            <div style="margin-top:15px; text-align:right;">
+                <button type="submit" class="btn-primary">Invia Messaggio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Aspetta che la pagina sia caricata
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Prendi gli elementi dal DOM
+        var modal = document.getElementById("requestModal");
+        var btn = document.getElementById("btnApriModale");
+        var span = document.getElementById("btnClose");
+
+        // Se il bottone esiste (quindi l'utente è loggato e non è il proprietario)
+        if (btn) {
+            btn.onclick = function() {
+                modal.style.display = "flex"; // Mostra il modale
+            }
+        }
+
+        // Se clicchi sulla X, chiudi
+        if (span) {
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+
+        // Se clicchi fuori dal box bianco, chiudi
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
