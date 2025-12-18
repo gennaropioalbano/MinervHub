@@ -25,9 +25,9 @@
         </div>
 
         <div sec:authorize="isAuthenticated()" class="nav-logged-in">
-            <span class="nav-user">
-                <span th.text="&{#authentication.name}">Utente</span>
-            </span>
+    <span class="nav-user">
+        Ciao, <span th:text="${#authentication.principal.nome}">Utente</span>
+    </span>
             <form th:action="@{/logout}" method="post" class="logout-form">
                 <button type="submit" class="btn-logout" title="Esci">Esci</button>
             </form>
