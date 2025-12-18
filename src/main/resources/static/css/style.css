@@ -145,7 +145,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 5%;
+    padding: 30px 5%;
 }
 
 .nav-left .logo-link {
@@ -173,6 +173,8 @@ header {
     position: relative;
     padding: 8px 15px;
     border-radius: 20px;
+    font-weight: normal;
+    color: #000000;
     transition: all 0.2s ease;
 }
 
