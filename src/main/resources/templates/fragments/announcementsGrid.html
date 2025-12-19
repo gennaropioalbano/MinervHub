@@ -1,63 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="grid-wrapper" th:fragment="announcementsGrid(mostraBottone, isPersonal)">
+<div th:fragment="announcementsGrid(mostraBottone, isPersonal)">
 
-    <div class="grid-header" th:if="${mostraBottone}">
-        <a th:href="@{/annunci/create}" class="btn-action">
-            <i class="fa-solid fa-plus"></i> Crea nuovo annuncio
-        </a>
-    </div>
+    <div class="announcements-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; padding: 1rem;">
 
-    <div class="announcements-grid">
+        <div th:if="${annunci.isEmpty()}" style="grid-column: 1 / -1; text-align: center; color: gray;">
+            <h3>Nessun annuncio trovato.</h3>
+        </div>
 
-        <div th:each="annuncio : ${annunci}" class="announcement-card-wrapper">
+        <div th:each="annuncio : ${annunci}" class="card" style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
 
-            <a th:href="@{/bacheca/{id}(id=${annuncio.id})}" class="announcement-card">
-
-                <div class="card-top">
-                    <h3 th:text="${annuncio.titolo}">Titolo</h3>
-                    <div class="price-badge">
-                        <span th:text="${annuncio.tariffaOraria}">0</span>
-                        <span class="currency">€/h</span>
-                    </div>
-                </div>
-
-                <p class="card-description" th:text="${annuncio.descrizione}">Descrizione...</p>
-
-                <div class="card-divider"></div>
-
-                <div class="card-owner" th:if="${!isPersonal}">
-                    <div class="owner-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div class="owner-info">
-                        <span class="label">Tutor</span>
-                        <span class="name" th:text="${annuncio.autore?.nome} ?: 'Tutor'">Tutor</span>
-                    </div>
-                </div>
-
-                <div class="card-owner" th:if="${isPersonal}">
-                    <div class="owner-info">
-                        <span class="label" style="color: var(--color-card-green);">Il tuo annuncio</span>
-                    </div>
-                </div>
+            <a th:href="@{/annunci/detail/{id}(id=${annuncio.id})}" style="text-decoration: none; display: block;">
+                <img src="https://placehold.co/600x400/4f46e5/white?text=Annuncio" alt="Immagine" style="width: 100%; height: 200px; object-fit: cover;">
             </a>
 
-            <div class="card-actions" th:if="${isPersonal}">
-                <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-edit">
-                    <i class="fa-solid fa-pen"></i> Modifica
+            <div class="card-body" style="padding: 1.5rem;">
+
+                <a th:href="@{/annunci/detail/{id}(id=${annuncio.id})}" style="text-decoration: none; color: inherit;">
+                    <h3 th:text="${annuncio.titolo}"
+                        style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; color: #1f2937; cursor: pointer;"
+                        onmouseover="this.style.color='#4f46e5'; this.style.textDecoration='underline';"
+                        onmouseout="this.style.color='#1f2937'; this.style.textDecoration='none';">
+                        Titolo Annuncio
+                    </h3>
                 </a>
-                <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}"
-                   class="btn-delete"
-                   onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?')">
-                    <i class="fa-solid fa-trash"></i> Elimina
-                </a>
+
+                <p style="color: #4f46e5; font-weight: bold; margin-bottom: 1rem;"
+                   th:text="'€ ' + ${annuncio.tariffaOraria} + '/h'">€ 0/h</p>
+
+                <div style="font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem;">
+                    <i class="fa-solid fa-graduation-cap"></i> <span th:text="${annuncio.corsoLaurea}">Corso</span><br>
+                    <i class="fa-solid fa-book"></i> <span th:text="${annuncio.esame}">Esame</span>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem;">
+
+                    <a th:href="@{/annunci/detail/{id}(id=${annuncio.id})}"
+                       class="btn-primary"
+                       style="flex: 1; text-align: center; text-decoration: none; padding: 0.5rem; background-color: #4f46e5; color: white; border-radius: 5px;">
+                        Dettagli
+                    </a>
+
+                    <div th:if="${isPersonal}" style="display: flex; gap: 0.5rem;">
+                        <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}"
+                           class="btn-secondary"
+                           title="Modifica"
+                           style="padding: 0.5rem; background-color: #f59e0b; color: white; border-radius: 5px; text-decoration: none;">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}"
+                           onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?')"
+                           class="btn-secondary"
+                           title="Elimina"
+                           style="padding: 0.5rem; background-color: #ef4444; color: white; border-radius: 5px; text-decoration: none;">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+
             </div>
-
-        </div> </div>
-
-    <div th:if="${annunci.empty}" style="text-align: center; color: #999; margin-top: 20px;">
-        <p>Non ci sono annunci da mostrare.</p>
+        </div>
     </div>
 </div>
 

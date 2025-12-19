@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titoloPagina} + ' | MinervHub'">Le mie Richieste</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .page-title { margin-bottom: 1.5rem; color: #1f2937; font-size: 1.8rem; text-align: center; }
+
+        .tabs-container { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 1rem; }
+        .tab-btn { text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; color: #4b5563; background-color: #f3f4f6; transition: all 0.2s; border: 2px solid transparent; }
+        .tab-btn:hover { background-color: #e5e7eb; }
+        .tab-btn.active { background-color: #4f46e5; color: white; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3); }
+
+        .request-card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; padding: 1.5rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f3f4f6; padding-bottom: 0.8rem; }
+        .annuncio-link { font-size: 1.2rem; font-weight: bold; color: #4f46e5; text-decoration: none; }
+        .tutor-info { font-size: 0.95rem; color: #374151; margin-top: 5px; }
+        .request-date { font-size: 0.85rem; color: #6b7280; }
+
+        /* Box Messaggi */
+        .message-box { background-color: #f9fafb; padding: 1rem; border-radius: 6px; font-size: 0.9rem; color: #4b5563; font-style: italic; border-left: 3px solid #d1d5db; }
+        .response-box { background-color: #eff6ff; padding: 1rem; border-radius: 6px; font-size: 0.9rem; color: #1e3a8a; border-left: 3px solid #3b82f6; margin-top: 0.5rem; }
+
+        .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        .status-ATTESA { background-color: #fef3c7; color: #92400e; }
+        .status-ACCETTATA { background-color: #d1fae5; color: #065f46; }
+        .status-DECLINATA { background-color: #fee2e2; color: #991b1b; }
+
+        /* Form Risposta */
+        .reply-form { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #e5e7eb; }
+        .reply-textarea { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; margin-bottom: 0.5rem; resize: vertical; font-family: inherit; }
+        .actions-row { display: flex; justify-content: space-between; align-items: center; }
+
+        .btn-accept { background-color: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .btn-accept:hover { background-color: #059669; }
+
+        .btn-decline { background-color: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .btn-decline:hover { background-color: #dc2626; }
+
+        .empty-state { text-align: center; padding: 4rem 1rem; color: #6b7280; }
+    </style>
+</head>
+<body>
+
+<header th:replace="~{fragments/navbar :: navFragment}"></header>
+
+<main class="container">
+
+    <div th:if="${successMessage}" style="background:#d1fae5; color:#065f46; padding:10px; margin-bottom:15px; border-radius:5px; text-align:center;">
+        <i class="fa-solid fa-check"></i> <span th:text="${successMessage}"></span>
+    </div>
+
+    <h1 class="page-title">Gestione Richieste</h1>
+
+    <div class="tabs-container">
+        <a th:href="@{/richieste/mie(tipo='inviate')}" class="tab-btn" th:classappend="${tipoCorrente == 'inviate'} ? 'active'">
+            <i class="fa-solid fa-paper-plane"></i> Inviate
+        </a>
+        <a th:href="@{/richieste/mie(tipo='ricevute')}" class="tab-btn" th:classappend="${tipoCorrente == 'ricevute'} ? 'active'">
+            <i class="fa-solid fa-inbox"></i> Ricevute
+        </a>
+    </div>
+
+    <div th:if="${richieste.isEmpty()}" class="empty-state">
+        <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; color: #d1d5db;"></i>
+        <h3 th:text="${tipoCorrente == 'inviate'} ? 'Non hai inviato nessuna richiesta.' : 'Non hai ricevuto nessuna richiesta.'"></h3>
+        <div th:if="${tipoCorrente == 'inviate'}">
+            <a th:href="@{/annunci}" class="btn-primary" style="margin-top: 1rem; display: inline-block; background-color: #4f46e5; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none;">Vai alla Bacheca</a>
+        </div>
+    </div>
+
+    <div th:each="richiesta : ${richieste}" class="request-card">
+
+        <div class="card-header">
+            <div>
+                <a th:href="@{/annunci/detail/{id}(id=${richiesta.annuncio.id})}" class="annuncio-link" th:text="${richiesta.annuncio.titolo}">Titolo</a>
+
+                <div th:if="${tipoCorrente == 'inviate'}" class="tutor-info">
+                    <i class="fa-solid fa-user-tie"></i> A Tutor: <span th:text="${richiesta.tutor.nome} + ' ' + ${richiesta.tutor.cognome}"></span>
+                </div>
+
+                <div th:if="${tipoCorrente == 'ricevute'}" class="tutor-info">
+                    <i class="fa-solid fa-graduation-cap"></i> Da Studente: <span th:text="${richiesta.allievo.nome} + ' ' + ${richiesta.allievo.cognome}"></span>
+                </div>
+            </div>
+            <span class="request-date">
+                <i class="fa-regular fa-calendar"></i> <span th:text="${#temporals.format(richiesta.data, 'dd/MM/yyyy HH:mm')}">Data</span>
+            </span>
+        </div>
+
+        <div class="message-box">
+            <i class="fa-solid fa-quote-left" style="color: #9ca3af; margin-right: 5px;"></i>
+            <span th:text="${richiesta.messaggio}">Messaggio...</span>
+        </div>
+
+        <div th:if="${richiesta.risposta != null and !richiesta.risposta.isEmpty()}" class="response-box">
+            <i class="fa-solid fa-reply" style="color: #60a5fa; margin-right: 5px;"></i>
+            <strong>Risposta:</strong> <span th:text="${richiesta.risposta}">Risposta...</span>
+        </div>
+
+        <div class="actions-row" style="margin-top: 10px;">
+
+            <div>
+                <span style="font-size: 0.9rem; color: #666;">Stato:</span>
+                <span class="status-badge"
+                      th:classappend="${richiesta.stato.name() == 'IN_ATTESA' ? 'status-ATTESA' :
+                                       (richiesta.stato.name() == 'ACCETTATA' ? 'status-ACCETTATA' : 'status-DECLINATA')}"
+                      th:text="${richiesta.stato.name().replace('_', ' ')}">IN ATTESA</span>
+            </div>
+
+            <div th:if="${tipoCorrente == 'ricevute' and richiesta.stato.name() == 'IN_ATTESA'}" style="width: 100%;">
+
+                <form th:action="@{/richieste/gestisci}" method="post" class="reply-form">
+                    <input type="hidden" name="id" th:value="${richiesta.id}">
+
+                    <label style="font-size:0.9rem; font-weight:bold; display:block; margin-bottom:5px;">Rispondi allo studente:</label>
+                    <textarea name="risposta" class="reply-textarea" rows="2" placeholder="Scrivi una risposta opzionale (es. 'Va bene, ci vediamo lunedì')..." maxlength="255"></textarea>
+
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="submit" name="nuovoStato" value="DECLINATA" class="btn-decline">
+                            <i class="fa-solid fa-xmark"></i> Rifiuta
+                        </button>
+                        <button type="submit" name="nuovoStato" value="ACCETTATA" class="btn-accept">
+                            <i class="fa-solid fa-check"></i> Accetta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footerFragment}"></div>
+
+</body>
+</html>

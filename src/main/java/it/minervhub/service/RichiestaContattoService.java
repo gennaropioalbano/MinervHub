@@ -87,4 +87,34 @@ public class RichiestaContattoService {
         richiesta.setStato(StatoRichiesta.valueOf(nuovoStatoString.toUpperCase()));
         richiestaRepository.save(richiesta);
     }
+
+    // ... altri metodi ...
+
+    @Transactional
+    public void gestisciRichiesta(Long idRichiesta, String emailTutor, String nuovoStato, String messaggioRisposta) {
+        // 1. Recupera la richiesta
+        RichiestaContatto richiesta = richiestaRepository.findById(idRichiesta)
+                .orElseThrow(() -> new IllegalArgumentException("Richiesta non trovata"));
+
+        // 2. Sicurezza: controlla che sia davvero il tutor di questa richiesta a rispondere
+        if (!richiesta.getTutor().getEmail().equals(emailTutor)) {
+            throw new SecurityException("Non sei autorizzato a gestire questa richiesta.");
+        }
+
+        // 3. Aggiorna lo stato
+        try {
+            richiesta.setStato(StatoRichiesta.valueOf(nuovoStato));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Stato non valido: " + nuovoStato);
+        }
+
+        // 4. Salva la risposta (Se presente nell'entità come hai detto)
+        // Assumo che il campo nella tua Entity si chiami "risposta" o simile.
+        // Se si chiama diversamente, cambia .setRisposta(...)
+        if (messaggioRisposta != null && !messaggioRisposta.isBlank()) {
+            richiesta.setRisposta(messaggioRisposta);
+        }
+
+        richiestaRepository.save(richiesta);
+    }
 }
