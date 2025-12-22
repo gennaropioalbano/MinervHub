@@ -68,42 +68,6 @@
     </div>
 
   </section>
-
-
-  <aside class="publisher-sidebar">
-    <div class="publisher-card">
-      <h3>Pubblicato da</h3>
-
-      <div class="publisher-info">
-        <img th:src="@{'https://ui-avatars.com/api/?name=' + ${annuncio.autore.nome} + '+' + ${annuncio.autore.cognome} + '&background=random'}"
-             alt="Avatar" class="publisher-avatar">
-
-        <div class="publisher-text">
-          <p class="publisher-name" th:text="${annuncio.autore.nome} + ' ' + ${annuncio.autore.cognome}">Nome Utente</p>
-          <p class="publisher-rating" style="font-size: 0.85rem; color: #6b7280;">
-            <i class="fa-regular fa-envelope"></i> <span th:text="${annuncio.autore.email}">email@esempio.com</span>
-          </p>
-        </div>
-      </div>
-
-      <div class="contact-actions">
-        <a th:href="'mailto:' + ${annuncio.autore.email} + '?subject=Info Annuncio: ' + ${annuncio.titolo}"
-           class="btn-primary full-width" style="text-decoration: none;">
-          <i class="fa-regular fa-envelope"></i> Contatta via Email
-        </a>
-
-        <button type="button" class="btn-secondary full-width" id="btnInviaRichiesta" style="margin-bottom: 0.5rem;">
-          <i class="fa-solid fa-paper-plane"></i> Invia Richiesta
-        </button>
-      </div>
-
-      <div class="safety-tips">
-        <i class="fa-solid fa-shield-halved"></i>
-        <small>Consiglio: Scambia a mano in università o in biblioteca.</small>
-      </div>
-    </div>
-  </aside>
-
 </main>
 
 <div th:replace="~{fragments/footer :: footerFragment}"></div>

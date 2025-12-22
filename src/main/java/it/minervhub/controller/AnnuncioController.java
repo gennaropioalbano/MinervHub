@@ -22,31 +22,6 @@ public class AnnuncioController {
     @Autowired
     private AnnuncioService annuncioService;
 
-    // --- LISTA BACHECA ---
-    @GetMapping({"", "/"})
-    public String showAnnuncioList(Model model) {
-        model.addAttribute("annunci", annuncioService.findAll());
-        return "bacheca";
-    }
-
-    // --- DETTAGLIO ANNUNCIO ---
-    @GetMapping("/detail/{id}")
-    public String showAnnuncioDetail(@PathVariable Long id, Model model) {
-        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
-
-        if (annuncioOpt.isEmpty()) {
-            return "redirect:/annunci";
-        }
-
-        model.addAttribute("annuncio", annuncioOpt.get());
-
-        // Passiamo l'utente corrente per gestire i bottoni "Modifica/Elimina" nella vista
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("currentUsername", currentUsername);
-
-        return "annuncio";
-    }
-
     // --- CREAZIONE ---
     @GetMapping("/create")
     public String showCreatePage(Model model) {
@@ -131,5 +106,23 @@ public class AnnuncioController {
         model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
 
         return "mieiAnnunci"; // Assicurati di avere questo template o usa "bacheca" se condividono la vista
+    }
+
+    @GetMapping("/{id}")
+    public String showAnnuncioDetail(@PathVariable Long id, Model model) {
+
+        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
+
+        if (annuncioOpt.isEmpty()) {
+            return "error/404";
+        }
+
+        Annuncio annuncio = annuncioOpt.get();
+        model.addAttribute("annuncio", annuncio);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("currentUsername", auth.getName());
+
+        return "mioAnnuncio"; // UNICA vista di dettaglio
     }
 }
