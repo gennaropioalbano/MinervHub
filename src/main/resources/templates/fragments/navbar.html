@@ -1,21 +1,15 @@
-<header th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org"
+<nav class="navbar" th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <!-- Logo -->
-    <div class="nav-left">
-        <a th:href="@{/home}" class="logo-link">
-            <span class="logo-text">MinervHub</span>
-        </a>
+    <div class="navdiv">
+        <div class="logo" th:href="@{/home}"><a>MinervHub</a></div>
     </div>
 
-    <!-- Menu principale -->
-    <div class="nav-center">
-        <ul class="nav-list">
-            <li class="nav-item"><a th:href="@{/bacheca}" class="nav-link">Bacheca</a></li>
-            <li class="nav-item"><a th:href="@{/annunci/miei}" class="nav-link">I miei annunci</a></li>
-            <li class="nav-item"><a th:href="@{/richieste/mie}" class="nav-link">Le mie richieste</a></li>
-        </ul>
-    </div>
+    <ul>
+        <li><a th:href="@{/bacheca}">Bacheca</a></li>
+        <li><a th:href="@{/annunci/miei}">I miei annunci</a></li>
+        <li><a th:href="@{/richieste/mie}">Le mie richieste</a></li>
+    </ul>
 
     <div class="nav-right">
         <div sec:authorize="!isAuthenticated()">
@@ -33,4 +27,4 @@
             </form>
         </div>
     </div>
-</header>
+</nav>
