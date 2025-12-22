@@ -1,15 +1,12 @@
 package it.minervhub.controller;
 
-import org.springframework.ui.Model;
 import it.minervhub.model.InviaRichiestaDTO;
 import it.minervhub.service.RichiestaContattoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model; // Import corretto
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -31,19 +28,18 @@ public class RichiestaContattoController {
             Principal principal,
             RedirectAttributes redirectAttributes) {
 
-        // --- MODIFICA QUI: Invece di tornare al dettaglio, torniamo alla Bacheca ---
-        // Assumo che la tua bacheca sia mappata su "/annunci" o "/home".
-        // Se la tua home page è "/", scrivi "redirect:/"
-        String redirectUrl = "redirect:/annunci";
-        // --------------------------------------------------------------------------
+        // 1. Definiamo l'URL di ritorno
+        // IMPORTANTE: Deve essere "/detail/" perché il tuo AnnuncioController usa quello.
+        // Se usi "/dettaglio/", il sito si rompe dopo l'invio.
+        String redirectUrl = "redirect:/annunci/detail/" + richiestaDTO.getIdAnnuncio();
 
-        // Controllo ID nullo (Sicurezza)
+        // Controllo ID nullo
         if (richiestaDTO.getIdAnnuncio() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore tecnico: Annuncio non identificato.");
-            return redirectUrl;
+            return "redirect:/annunci";
         }
 
-        // Controllo errori di validazione (es. messaggio vuoto)
+        // Controllo Errori Form (es. messaggio vuoto)
         if (bindingResult.hasErrors()) {
             String errore = bindingResult.getFieldError().getDefaultMessage();
             redirectAttributes.addFlashAttribute("errorMessage", errore);
@@ -51,18 +47,17 @@ public class RichiestaContattoController {
         }
 
         try {
-            // Tentativo di invio
+            // Invio effettivo
             richiestaContattoService.inviaRichiesta(principal.getName(), richiestaDTO);
 
-            // Successo!
+            // Messaggio di successo
             redirectAttributes.addFlashAttribute("successMessage", "Richiesta inviata con successo! Il tutor ti risponderà presto.");
 
         } catch (IllegalArgumentException e) {
-            // Errori previsti (es. "Hai già una richiesta in attesa")
-            // Questo messaggio verrà mostrato nella bacheca
+            // Errore previsto (es. hai già inviato richiesta)
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         } catch (Exception e) {
-            // Errori imprevisti
+            // Errore imprevisto
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "Si è verificato un errore imprevisto.");
         }
@@ -70,14 +65,47 @@ public class RichiestaContattoController {
         return redirectUrl;
     }
 
-    @GetMapping("/inviate")
-    public String visualizzaRichiesteInviate(Model model, Principal principal) {
-        // Recupera le richieste usando il Service che hai già creato
-        var richieste = richiestaContattoService.findRichiesteInviate(principal.getName());
+    // --- GESTIONE LISTE (MIE RICHIESTE) ---
+    @GetMapping("/mie")
+    public String visualizzaRichieste(
+            @RequestParam(defaultValue = "inviate") String tipo,
+            Model model,
+            Principal principal) {
 
-        // Passa la lista alla pagina HTML
-        model.addAttribute("richieste", richieste);
+        String email = principal.getName();
+        model.addAttribute("tipoCorrente", tipo);
 
-        return "richieste-inviate"; // Questo deve essere il nome del file HTML qui sotto
+        if ("ricevute".equals(tipo)) {
+            var richieste = richiestaContattoService.findRichiesteRicevute(email);
+            model.addAttribute("richieste", richieste);
+            model.addAttribute("titoloPagina", "Richieste Ricevute");
+        } else {
+            var richieste = richiestaContattoService.findRichiesteInviate(email);
+            model.addAttribute("richieste", richieste);
+            model.addAttribute("titoloPagina", "Richieste Inviate");
+        }
+
+        return "mie-richieste";
+    }
+
+    // --- GESTIONE AZIONI (ACCETTA/RIFIUTA) ---
+    @PostMapping("/gestisci")
+    public String gestisciRichiesta(
+            @RequestParam("id") Long idRichiesta,
+            @RequestParam("nuovoStato") String nuovoStato,
+            @RequestParam(value = "risposta", required = false) String risposta,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            richiestaContattoService.gestisciRichiesta(idRichiesta, principal.getName(), nuovoStato, risposta);
+            String msg = nuovoStato.equals("ACCETTATA") ? "Richiesta accettata!" : "Richiesta declinata.";
+            redirectAttributes.addFlashAttribute("successMessage", msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
+        }
+
+        return "redirect:/richieste/mie?tipo=ricevute";
     }
 }

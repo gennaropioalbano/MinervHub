@@ -16,7 +16,7 @@ public class RichiestaContatto {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "messaggio", length = 200, nullable = false)
+    @Column(name = "messaggio", length = 200)
     private String messaggio;
 
     @Column(name = "risposta", length = 200)

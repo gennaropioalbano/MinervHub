@@ -28,7 +28,7 @@ public class Annuncio {
     @Column(name = "disponibile", nullable = false)
     private boolean disponibile;
 
-    @Column(name = "esame", length = 30, nullable = false)
+    @Column(name = "esame", length = 50, nullable = false)
     private String esame;
 
     @Column(name = "tariffa_oraria", nullable = false)
@@ -38,7 +38,7 @@ public class Annuncio {
     @Convert(converter = StringListConverter.class)
     private List<String> scambio;
 
-    @Column(name = "corso_laurea", length = 30)
+    @Column(name = "corso_laurea", length = 50)
     private String corsoLaurea;
 
     @ManyToOne(fetch = FetchType.LAZY)
