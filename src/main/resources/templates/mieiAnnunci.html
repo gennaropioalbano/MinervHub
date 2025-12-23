@@ -12,17 +12,7 @@
 <body>
 <header th:replace="~{fragments/navbar :: navFragment}"></header>
 
-<h1 class="page-title">Gestione Annunci</h1>
-
-<div class="announcement-container">
-    <a class="btn-create-annuncio" th:href="@{/annuncio/creaAnnuncio}">
-        Nuovo annuncio
-    </a>
-
-    <div class="announcement-grid-wrapper"
-            th:replace="~{fragments/elencoAnnunci :: elencoAnnunci(isPersonal=true)}">
-    </div>
-</div>
+<div class="announcement-grid-wrapper" th:replace="~{fragments/listaAnnunci}"></div>
 
 <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
 </body>

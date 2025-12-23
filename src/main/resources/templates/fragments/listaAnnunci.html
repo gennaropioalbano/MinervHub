@@ -1,0 +1,39 @@
+<section class="announcements-list" th:fragment="listaAnnunci">
+    <div class="announcements-list__grid">
+        <a class="announcement-add" th:href="@{/annuncio/creaAnnuncio}">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+        <article class="announcement-card" th:each="annuncio : ${annunci}">
+            <div class="announcement-card__header">
+                <div class="announcement-card__author">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="announcement-card__name">Marco Rossi</span>
+                </div>
+                <div class="card__actions">
+                    <a class="announcement-card__button announcement-card__button-edit" th:href="@{/annuncio/modificaAnnuncio/{id}(id=${annuncio.id})}">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <a class="announcement-card__button announcement-card__button-delete" th:href="@{/annuncio/eliminaAnnuncio/{id}(id=${annuncio.id})}" onclick="return confirm('Sei sicuro di voler eliminare questo annuncio?')">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="announcement-card__body">
+                <h3 class="announcement-card__title" th:text="${annuncio.titolo}"></h3>
+                <p class="announcement-card__description" th:text="${annuncio.descrizione}">
+                </p>
+            </div>
+
+            <div class="announcement-card__footer">
+                <div class="announcement-card__price">
+                    <span class="announcement-card__amount" th:text="${annuncio.tariffaOraria}"></span>
+                    <span class="announcement-card__unit">€/h</span>
+                </div>
+                <a class="announcement-card__button announcement-card__button--primary" th:href="@{/bacheca/{id}(id=${annuncio.id})}">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </article>
+    </div>
+</section>

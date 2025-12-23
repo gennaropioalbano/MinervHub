@@ -27,6 +27,19 @@ public class AnnuncioController {
     @Autowired
     private AnnuncioService annuncioService;
 
+    @GetMapping("/annuncio/{id}")
+    public String annuncio(@PathVariable Long id, Model model) {
+
+        Annuncio annuncio = annuncioService.getAnnuncioById(id);
+
+        if (annuncio == null) {
+            return "redirect:/annuncio";
+        }
+
+        model.addAttribute("annuncio", annuncio);
+        return "annuncio";
+    }
+
     // --- CREAZIONE ---
     @GetMapping("/creaAnnuncio")
     public String showCreatePage(Model model) {
@@ -50,9 +63,9 @@ public class AnnuncioController {
     }
 
     // --- 5. MODIFICA ---
-    @GetMapping("/edit/{id}")
+    @GetMapping("/modificaAnnuncio/{id}")
     public String showEditPage(@PathVariable Long id, Model model) {
-        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
+        Optional<Annuncio> annuncioOpt = Optional.ofNullable(annuncioService.getAnnuncioById(id));
 
         if (annuncioOpt.isEmpty()) {
             return "redirect:/annuncio/miei";
@@ -65,7 +78,7 @@ public class AnnuncioController {
         return "modificaAnnuncio";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/eliminaAnnuncio/{id}")
     public String editAnnuncio(
             @PathVariable Long id,
             @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
@@ -104,7 +117,7 @@ public class AnnuncioController {
     @GetMapping("/{id}")
     public String showAnnuncioDetail(@PathVariable Long id, Model model) {
 
-        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
+        Optional<Annuncio> annuncioOpt = Optional.ofNullable(annuncioService.getAnnuncioById(id));
 
         if (annuncioOpt.isEmpty()) {
             return "error/404";

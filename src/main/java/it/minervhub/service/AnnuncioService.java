@@ -28,9 +28,10 @@ public class AnnuncioService {
         return annuncioRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    // Recupera un singolo annuncio (ritorna Optional per gestire null safe)
-    public Optional<Annuncio> findById(Long id) {
-        return annuncioRepository.findById(id);
+
+    public Annuncio getAnnuncioById(Long id) {
+        Optional<Annuncio> annuncio = annuncioRepository.findById(id);
+        return annuncio.orElse(null);
     }
 
     // Recupera gli annunci di uno specifico utente (tramite email)
