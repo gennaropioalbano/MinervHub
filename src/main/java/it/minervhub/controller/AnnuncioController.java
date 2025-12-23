@@ -18,11 +18,54 @@ import java.util.Optional;
 @RequestMapping("/annunci")
 public class AnnuncioController {
 
-    // UNICA DIPENDENZA: Il Service (Niente Repository qui!)
     @Autowired
     private AnnuncioService annuncioService;
 
-    // --- CREAZIONE ---
+    // --- 1. BACHECA (LISTA DI TUTTI GLI ANNUNCI) ---
+    // Risolve l'errore "No static resource annunci"
+    @GetMapping({"", "/"})
+    public String showAnnuncioList(Model model) {
+        model.addAttribute("annunci", annuncioService.findAll());
+        return "bacheca"; // Assicurati che il file si chiami bacheca.html
+    }
+
+    // --- 2. DETTAGLIO ANNUNCIO ---
+    // Mappato su /annunci/{id} (es. /annunci/4)
+    @GetMapping("/{id}")
+    public String showAnnuncioDetail(@PathVariable Long id, Model model) {
+        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
+
+        if (annuncioOpt.isEmpty()) {
+            return "redirect:/annunci"; // Se non esiste, torna in bacheca
+        }
+
+        model.addAttribute("annuncio", annuncioOpt.get());
+
+        // Passiamo l'utente corrente (serve per mostrare/nascondere i bottoni modifica/elimina)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            model.addAttribute("currentUsername", auth.getName());
+        }
+
+        // IMPORTANTE: Questo deve coincidere con il nome del tuo file HTML di dettaglio.
+        // Se il file si chiama "annuncio.html", lascia "annuncio".
+        // Se si chiama "mioAnnuncio.html", scrivi "mioAnnuncio".
+        return "annuncio";
+    }
+
+    // --- 3. I MIEI ANNUNCI ---
+    @GetMapping("/miei")
+    public String showMyAnnunci(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        // Filtra solo gli annunci dell'utente loggato
+        model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
+
+        return "mieiAnnunci"; // Assicurati che il file si chiami mieiAnnunci.html
+    }
+
+    // --- 4. CREAZIONE ---
     @GetMapping("/create")
     public String showCreatePage(Model model) {
         model.addAttribute("annuncioDto", new AnnuncioDto());
@@ -39,17 +82,13 @@ public class AnnuncioController {
             return "createAnnuncio";
         }
 
-        // Recupero chi è loggato
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-
-        // Delega tutta la logica al service
-        annuncioService.createAnnuncio(dto, email);
+        annuncioService.createAnnuncio(dto, auth.getName());
 
         return "redirect:/annunci";
     }
 
-    // --- MODIFICA ---
+    // --- 5. MODIFICA ---
     @GetMapping("/edit/{id}")
     public String showEditPage(@PathVariable Long id, Model model) {
         Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
@@ -58,9 +97,7 @@ public class AnnuncioController {
             return "redirect:/annunci";
         }
 
-        // Usiamo il metodo del service per convertire l'Entità in DTO (per riempire i campi del form)
         AnnuncioDto dto = annuncioService.mapEntityToDto(annuncioOpt.get());
-
         model.addAttribute("annuncioDto", dto);
         model.addAttribute("annuncioId", id);
 
@@ -79,7 +116,6 @@ public class AnnuncioController {
             return "editAnnuncio";
         }
 
-        // Il service prova ad aggiornare. Se torna false (ID non trovato), redirect.
         boolean successo = annuncioService.updateAnnuncio(id, dto);
 
         if (!successo) {
@@ -89,40 +125,10 @@ public class AnnuncioController {
         return "redirect:/annunci";
     }
 
-    // --- ELIMINAZIONE ---
+    // --- 6. ELIMINAZIONE ---
     @GetMapping("/delete/{id}")
     public String deleteAnnuncio(@PathVariable Long id) {
         annuncioService.deleteAnnuncio(id);
         return "redirect:/annunci";
-    }
-
-    // --- I MIEI ANNUNCI ---
-    @GetMapping("/miei")
-    public String showMyAnnunci(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-
-        // Il service filtra per email dell'autore
-        model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
-
-        return "mieiAnnunci"; // Assicurati di avere questo template o usa "bacheca" se condividono la vista
-    }
-
-    @GetMapping("/{id}")
-    public String showAnnuncioDetail(@PathVariable Long id, Model model) {
-
-        Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
-
-        if (annuncioOpt.isEmpty()) {
-            return "error/404";
-        }
-
-        Annuncio annuncio = annuncioOpt.get();
-        model.addAttribute("annuncio", annuncio);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("currentUsername", auth.getName());
-
-        return "mioAnnuncio"; // UNICA vista di dettaglio
     }
 }

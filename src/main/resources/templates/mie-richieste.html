@@ -43,6 +43,10 @@
         .btn-decline { background-color: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
         .btn-decline:hover { background-color: #dc2626; }
 
+        /* Stile bottone annulla */
+        .btn-cancel { background-color: #6b7280; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
+        .btn-cancel:hover { background-color: #4b5563; }
+
         .empty-state { text-align: center; padding: 4rem 1rem; color: #6b7280; }
     </style>
 </head>
@@ -54,6 +58,10 @@
 
     <div th:if="${successMessage}" style="background:#d1fae5; color:#065f46; padding:10px; margin-bottom:15px; border-radius:5px; text-align:center;">
         <i class="fa-solid fa-check"></i> <span th:text="${successMessage}"></span>
+    </div>
+
+    <div th:if="${errorMessage}" style="background:#fee2e2; color:#991b1b; padding:10px; margin-bottom:15px; border-radius:5px; text-align:center;">
+        <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
     </div>
 
     <h1 class="page-title">Gestione Richieste</h1>
@@ -79,7 +87,7 @@
 
         <div class="card-header">
             <div>
-                <a th:href="@{/annunci/detail/{id}(id=${richiesta.annuncio.id})}" class="annuncio-link" th:text="${richiesta.annuncio.titolo}">Titolo</a>
+                <a th:href="@{/annunci/{id}(id=${richiesta.annuncio.id})}" class="annuncio-link" th:text="${richiesta.annuncio.titolo}">Titolo</a>
 
                 <div th:if="${tipoCorrente == 'inviate'}" class="tutor-info">
                     <i class="fa-solid fa-user-tie"></i> A Tutor: <span th:text="${richiesta.tutor.nome} + ' ' + ${richiesta.tutor.cognome}"></span>
@@ -106,7 +114,7 @@
 
         <div class="actions-row" style="margin-top: 10px;">
 
-            <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 0.9rem; color: #666;">Stato:</span>
                 <span class="status-badge"
                       th:classappend="${richiesta.stato.name() == 'IN_ATTESA' ? 'status-ATTESA' :
@@ -114,8 +122,16 @@
                       th:text="${richiesta.stato.name().replace('_', ' ')}">IN ATTESA</span>
             </div>
 
-            <div th:if="${tipoCorrente == 'ricevute' and richiesta.stato.name() == 'IN_ATTESA'}" style="width: 100%;">
+            <div th:if="${tipoCorrente == 'inviate' and richiesta.stato.name() == 'IN_ATTESA'}">
+                <form th:action="@{/richieste/annulla}" method="post" onsubmit="return confirm('Sei sicuro di voler annullare questa richiesta?');">
+                    <input type="hidden" name="id" th:value="${richiesta.id}">
+                    <button type="submit" class="btn-cancel">
+                        <i class="fa-solid fa-trash-can"></i> Annulla
+                    </button>
+                </form>
+            </div>
 
+            <div th:if="${tipoCorrente == 'ricevute' and richiesta.stato.name() == 'IN_ATTESA'}" style="width: 100%;">
                 <form th:action="@{/richieste/gestisci}" method="post" class="reply-form">
                     <input type="hidden" name="id" th:value="${richiesta.id}">
 
