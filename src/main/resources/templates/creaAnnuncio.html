@@ -12,8 +12,9 @@
         <div class="col-md-8 mx-auto rounded border p-4 m-4">
             <h2 class="text-center mb-5" th:text="${annuncioDto.id != null} ? 'Modifica Annuncio' : 'Nuovo Annuncio'">Nuovo Annuncio</h2>
 
-            <form th:action="${annuncioDto.id != null} ? @{'/annunci/edit/' + ${annuncioDto.id}} : @{/annunci/create}"
+            <form th:action="|${annuncioDto.id != null ? '/annuncio/edit/' + annuncioDto.id : '/annuncio/creaAnnuncio'}|"
                   method="post" th:object="${annuncioDto}">
+
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                 <div class="row mb-3">
@@ -73,7 +74,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

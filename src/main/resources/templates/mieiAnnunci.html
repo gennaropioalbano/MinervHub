@@ -5,18 +5,25 @@
     <title>I Miei Annunci | MinervHub</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/mieiAnnunci.css}">
+    <link rel="stylesheet" th:href="@{/css/annunci.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 <header th:replace="~{fragments/navbar :: navFragment}"></header>
 
-<div class="section-intro" style="text-align: center; margin-top: 40px;">
-    <h2>Gestione Annunci</h2>
-    <p>Qui puoi vedere, modificare ed eliminare le tue offerte di scambio.</p>
+<h1 class="page-title">Gestione Annunci</h1>
+
+<div class="announcement-container">
+    <a class="btn-create-annuncio" th:href="@{/annuncio/creaAnnuncio}">
+        Nuovo annuncio
+    </a>
+
+    <div class="announcement-grid-wrapper"
+            th:replace="~{fragments/elencoAnnunci :: elencoAnnunci(isPersonal=true)}">
+    </div>
 </div>
 
-<div th:replace="~{fragments/announcementsGrid :: announcementsGrid(mostraBottone=true, isPersonal=true)}"></div>
-
-<div th:replace="~{fragments/footer :: footerFragment}"></div>
+<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
 </body>
 </html>

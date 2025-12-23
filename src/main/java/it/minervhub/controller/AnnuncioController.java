@@ -2,51 +2,49 @@ package it.minervhub.controller;
 
 import it.minervhub.model.Annuncio;
 import it.minervhub.model.AnnuncioDto;
+import it.minervhub.model.Utente;
 import it.minervhub.service.AnnuncioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/annunci")
+@RequestMapping("/annuncio")
 public class AnnuncioController {
 
-    // UNICA DIPENDENZA: Il Service (Niente Repository qui!)
     @Autowired
     private AnnuncioService annuncioService;
 
-    // --- CREAZIONE ---
-    @GetMapping("/create")
-    public String showCreatePage(Model model) {
+    @GetMapping("/creaAnnuncio")
+    public String showCreateForm(Model model) {
         model.addAttribute("annuncioDto", new AnnuncioDto());
-        return "createAnnuncio";
+        return "/creaAnnuncio";
     }
 
-    @PostMapping("/create")
-    public String createAnnuncio(
-            @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
-            BindingResult result,
-            Model model) {
+    @PostMapping("/creaAnnuncio")
+    public String creaAnnuncio(
+            @Valid @ModelAttribute("annuncioDto") AnnuncioDto annuncioDto,
+            BindingResult bindingResult,
+            Principal principal) {
 
-        if (result.hasErrors()) {
-            return "createAnnuncio";
+        if (bindingResult.hasErrors()) {
+            return "/creaAnnuncio";
         }
 
-        // Recupero chi è loggato
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-
-        // Delega tutta la logica al service
-        annuncioService.createAnnuncio(dto, email);
-
-        return "redirect:/annunci";
+        annuncioService.save(annuncioDto, principal.getName());
+        return "redirect:/annuncio/miei";
     }
 
     // --- MODIFICA ---
@@ -55,7 +53,7 @@ public class AnnuncioController {
         Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
 
         if (annuncioOpt.isEmpty()) {
-            return "redirect:/annunci";
+            return "redirect:/annuncio/miei";
         }
 
         // Usiamo il metodo del service per convertire l'Entità in DTO (per riempire i campi del form)
@@ -64,7 +62,7 @@ public class AnnuncioController {
         model.addAttribute("annuncioDto", dto);
         model.addAttribute("annuncioId", id);
 
-        return "editAnnuncio";
+        return "modificaAnnuncio";
     }
 
     @PostMapping("/edit/{id}")
@@ -76,7 +74,7 @@ public class AnnuncioController {
 
         if (result.hasErrors()) {
             model.addAttribute("annuncioId", id);
-            return "editAnnuncio";
+            return "modificaAnnuncio";
         }
 
         // Il service prova ad aggiornare. Se torna false (ID non trovato), redirect.
@@ -92,20 +90,21 @@ public class AnnuncioController {
     // --- ELIMINAZIONE ---
     @GetMapping("/delete/{id}")
     public String deleteAnnuncio(@PathVariable Long id) {
-        annuncioService.deleteAnnuncio(id);
-        return "redirect:/annunci";
+        annuncioService.eliminaAnnuncio(id);
+        return "redirect:/annuncio/miei";
     }
 
     // --- I MIEI ANNUNCI ---
     @GetMapping("/miei")
-    public String showMyAnnunci(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+    public String showMyAnnunci(Model model, Principal principal) {
+        List<Annuncio> annunci = annuncioService.findByAutoreEmail(principal.getName());
+        if (annunci == null) {
+            annunci = Collections.emptyList();
+        }
 
-        // Il service filtra per email dell'autore
-        model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
+        model.addAttribute("annunci", annunci);
 
-        return "mieiAnnunci"; // Assicurati di avere questo template o usa "bacheca" se condividono la vista
+        return "mieiAnnunci";
     }
 
     @GetMapping("/{id}")

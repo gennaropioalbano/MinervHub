@@ -31,12 +31,12 @@ public class RichiestaContattoController {
         // 1. Definiamo l'URL di ritorno
         // IMPORTANTE: Deve essere "/detail/" perché il tuo AnnuncioController usa quello.
         // Se usi "/dettaglio/", il sito si rompe dopo l'invio.
-        String redirectUrl = "redirect:/annunci/detail/" + richiestaDTO.getIdAnnuncio();
+        String redirectUrl = "redirect:/annuncio/detail/" + richiestaDTO.getIdAnnuncio();
 
         // Controllo ID nullo
         if (richiestaDTO.getIdAnnuncio() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore tecnico: Annuncio non identificato.");
-            return "redirect:/annunci";
+            return "redirect:/annuncio";
         }
 
         // Controllo Errori Form (es. messaggio vuoto)

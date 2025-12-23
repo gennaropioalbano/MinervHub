@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,16 +42,25 @@ public class AnnuncioService {
         return annuncioRepository.findByAutore(utente);
     }
 
-    // CREAZIONE ANNUNCIO: Logica di conversione e assegnazione autore
-    public void createAnnuncio(AnnuncioDto dto, String userEmail) {
+    public void save(AnnuncioDto dto, String email) {
+        Utente utente =  utenteRepository.findByEmail(email);
+
         Annuncio annuncio = new Annuncio();
-        mapDtoToEntity(dto, annuncio); // Metodo helper privato (vedi sotto)
-
+        annuncio.setAutore(utente);
+        annuncio.setTitolo(dto.getTitolo());
+        annuncio.setDescrizione(dto.getDescrizione());
+        annuncio.setEsame(dto.getEsame());
+        annuncio.setCorsoLaurea(dto.getCorsoLaurea());
+        annuncio.setTariffaOraria(dto.getTariffaOraria());
         annuncio.setDisponibile(true);
-
-        // Associa l'autore recuperandolo dall'email
-        Utente autore = utenteRepository.findByEmail(userEmail);
-        annuncio.setAutore(autore);
+        annuncio.setScambio(
+                dto.getScambio() == null || dto.getScambio().isBlank()
+                    ? Collections.emptyList()
+                    : Arrays.stream(dto.getScambio().split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isBlank())
+                        .toList()
+        );
 
         annuncioRepository.save(annuncio);
     }
@@ -74,7 +84,7 @@ public class AnnuncioService {
     }
 
     // CANCELLAZIONE
-    public void deleteAnnuncio(Long id) {
+    public void eliminaAnnuncio(Long id) {
         if (annuncioRepository.existsById(id)) {
             annuncioRepository.deleteById(id);
         }

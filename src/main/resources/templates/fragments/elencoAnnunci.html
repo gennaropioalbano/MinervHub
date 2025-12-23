@@ -1,14 +1,8 @@
-<div th:fragment="announcementsGrid(mostraBottone, isPersonal)" class="announcements">
-
-    <div th:if="${mostraBottone}" class="announcements__header" >
-        <a th:href="@{/annuncio/creaAnnuncio}" class="annoucements__create-btn">
-            <i class="fa-solid fa-plus"></i> Crea nuovo annuncio
-        </a>
-    </div>
+<div th:fragment="elencoAnnunci(isPersonal)" class="announcements">
 
     <div class="announcements__grid">
         <article th:each="annuncio : ${annunci}" class="card">
-            <a th:href="@{/bacheca/{id}(id=${annuncio.id})}" class="card__link">
+            <a class="card__link">
                 <div class="card__header">
                     <h3 class="card__title" th:text="${annuncio.titolo}">Titolo</h3>
                     <div class="card__price">
