@@ -1,30 +1,46 @@
-<nav class="navbar" th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-    <div class="navdiv">
-        <div class="logo" th:href="@{/home}"><a>MinervHub</a></div>
+<nav class="nav" th:fragment="navFragment" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="nav__brand">
+        <a th:href="@{/home}" class="nav__logo">MinervHub</a>
     </div>
 
-    <ul>
-        <li><a th:href="@{/bacheca}">Bacheca</a></li>
-        <li><a th:href="@{/annunci/miei}">I miei annunci</a></li>
-        <li><a th:href="@{/richieste/mie}">Le mie richieste</a></li>
-    </ul>
+    <div class="nav__right">
+        <ul class="nav__menu">
+            <li class="nav__menu-item">
+                <a th:href="@{/bacheca}" class="nav__menu-link">
+                    Bacheca
+                </a>
+            </li>
+            <li class="nav__menu-item">
+                <a th:href="@{/annunci/miei}" class="nav__menu-link">
+                    I miei annunci
+                </a>
+            </li>
+            <li class="nav__menu-item">
+                <a th:href="@{/richieste/mie}" class="nav__menu-link">
+                    Le mie richieste
+                </a>
+            </li>
+        </ul>
+        <div class="nav__toolbar">
+            <div class="nav__toolbar-auth" sec:authorize="!isAuthenticated()">
+                <a href="/login" class="nav__toolbar-button nav__toolbar-button--secondary">
+                    Accedi
+                </a>
+                <a href="/register" class="nav__toolbar-button nav__toolbar-button--primary">
+                    Registrati
+                </a>
+            </div>
 
-    <div class="nav-right">
-        <div sec:authorize="!isAuthenticated()">
-            <a  th:href="@{/login}" class="nav-user">
-                Login
-            </a>
-        </div>
-
-        <div sec:authorize="isAuthenticated()" class="nav-logged-in">
-            <span class="nav-user">
-                <span th.text="&{#authentication.name}">Utente</span>
-            </span>
-            <form th:action="@{/logout}" method="post" class="logout-form">
-                <button type="submit" class="btn-logout" title="Esci">Esci</button>
-            </form>
+            <div class="nav__toolbar-user" sec:authorize="isAuthenticated()">
+                <a th:action="@{/profilo}" class="nav__toolbar-button nav__toolbar-button--profile">
+                    Utente
+                </a>
+                <form th:action="@{/logout}" method="post" class="nav__toolbar-logout-form">
+                    <button type="submit" class="nav__toolbar-button nav__toolbar-button--logout">
+                        Esci
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
