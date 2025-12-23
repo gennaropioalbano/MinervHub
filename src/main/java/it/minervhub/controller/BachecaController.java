@@ -1,5 +1,6 @@
 package it.minervhub.controller;
 
+import it.minervhub.exceptions.InvalidFiltroException;
 import it.minervhub.model.Annuncio;
 import it.minervhub.service.BachecaService;
 import org.springframework.stereotype.Controller;
@@ -26,30 +27,32 @@ public class BachecaController {
             @RequestParam(required = false) Integer tariffaMax,
             Model model
     ) {
-        System.out.println("corsoLaurea: " + corsoLaurea);
-        System.out.println("esame: " + esame);
-        System.out.println("tariffaMax: " + tariffaMax);
 
-        // Imposta a null i parametri vuoti per evitare che vengano filtrati in modo errato
-        if (corsoLaurea != null && corsoLaurea.isEmpty()) {
-            corsoLaurea = null;
+        try {
+
+            if (corsoLaurea != null && corsoLaurea.isEmpty()) corsoLaurea = null;
+            if (esame != null && esame.isEmpty()) esame = null;
+
+            List<Annuncio> annunci;
+
+            if (corsoLaurea != null || esame != null || tariffaMax != null) {
+                annunci = bachecaService.getAnnunciFiltrati(corsoLaurea, esame, tariffaMax);
+            } else {
+                annunci = bachecaService.getAnnunciDisponibili();
+            }
+
+            model.addAttribute("annunci", annunci);
+
+        } catch (InvalidFiltroException e) {
+
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("annunci", bachecaService.getAnnunciDisponibili());
         }
-        if (esame != null && esame.isEmpty()) {
-            esame = null;
-        }
 
-        List<Annuncio> annunci;
-
-        // Filtra solo se uno dei parametri è presente
-        if (corsoLaurea != null || esame != null || tariffaMax != null) {
-            annunci = bachecaService.getAnnunciFiltrati(corsoLaurea, esame, tariffaMax);
-        } else {
-            annunci = bachecaService.getAnnunciDisponibili();
-        }
-
-        model.addAttribute("annunci", annunci);
-        return "bacheca"; // caricherà bacheca.html
+        return "bacheca";
     }
+
+
 
     @GetMapping("/bacheca/{id}")
     public String visualizzaAnnuncio(
