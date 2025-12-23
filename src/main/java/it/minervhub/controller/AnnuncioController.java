@@ -27,8 +27,9 @@ public class AnnuncioController {
     @Autowired
     private AnnuncioService annuncioService;
 
-    @GetMapping("/creaAnnuncio")
-    public String showCreateForm(Model model) {
+    // --- CREAZIONE ---
+    @GetMapping("/create")
+    public String showCreatePage(Model model) {
         model.addAttribute("annuncioDto", new AnnuncioDto());
         return "/creaAnnuncio";
     }
@@ -43,11 +44,17 @@ public class AnnuncioController {
             return "/creaAnnuncio";
         }
 
-        annuncioService.save(annuncioDto, principal.getName());
-        return "redirect:/annuncio/miei";
+        // Recupero chi è loggato
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        // Delega tutta la logica al service
+        annuncioService.createAnnuncio(dto, email);
+
+        return "redirect:/annunci";
     }
 
-    // --- MODIFICA ---
+    // --- 5. MODIFICA ---
     @GetMapping("/edit/{id}")
     public String showEditPage(@PathVariable Long id, Model model) {
         Optional<Annuncio> annuncioOpt = annuncioService.findById(id);
@@ -56,9 +63,7 @@ public class AnnuncioController {
             return "redirect:/annuncio/miei";
         }
 
-        // Usiamo il metodo del service per convertire l'Entità in DTO (per riempire i campi del form)
         AnnuncioDto dto = annuncioService.mapEntityToDto(annuncioOpt.get());
-
         model.addAttribute("annuncioDto", dto);
         model.addAttribute("annuncioId", id);
 
@@ -77,7 +82,6 @@ public class AnnuncioController {
             return "modificaAnnuncio";
         }
 
-        // Il service prova ad aggiornare. Se torna false (ID non trovato), redirect.
         boolean successo = annuncioService.updateAnnuncio(id, dto);
 
         if (!successo) {
@@ -87,7 +91,7 @@ public class AnnuncioController {
         return "redirect:/annunci";
     }
 
-    // --- ELIMINAZIONE ---
+    // --- 6. ELIMINAZIONE ---
     @GetMapping("/delete/{id}")
     public String deleteAnnuncio(@PathVariable Long id) {
         annuncioService.eliminaAnnuncio(id);
@@ -96,15 +100,14 @@ public class AnnuncioController {
 
     // --- I MIEI ANNUNCI ---
     @GetMapping("/miei")
-    public String showMyAnnunci(Model model, Principal principal) {
-        List<Annuncio> annunci = annuncioService.findByAutoreEmail(principal.getName());
-        if (annunci == null) {
-            annunci = Collections.emptyList();
-        }
+    public String showMyAnnunci(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
 
-        model.addAttribute("annunci", annunci);
+        // Il service filtra per email dell'autore
+        model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
 
-        return "mieiAnnunci";
+        return "mieiAnnunci"; // Assicurati di avere questo template o usa "bacheca" se condividono la vista
     }
 
     @GetMapping("/{id}")
