@@ -28,7 +28,7 @@ public class AnnuncioController {
     private AnnuncioService annuncioService;
 
     // --- CREAZIONE ---
-    @GetMapping("/create")
+    @GetMapping("/creaAnnuncio")
     public String showCreatePage(Model model) {
         model.addAttribute("annuncioDto", new AnnuncioDto());
         return "/creaAnnuncio";
@@ -36,7 +36,7 @@ public class AnnuncioController {
 
     @PostMapping("/creaAnnuncio")
     public String creaAnnuncio(
-            @Valid @ModelAttribute("annuncioDto") AnnuncioDto annuncioDto,
+            @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
             BindingResult bindingResult,
             Principal principal) {
 
@@ -44,14 +44,9 @@ public class AnnuncioController {
             return "/creaAnnuncio";
         }
 
-        // Recupero chi è loggato
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+        annuncioService.save(dto, principal.getName());
 
-        // Delega tutta la logica al service
-        annuncioService.createAnnuncio(dto, email);
-
-        return "redirect:/annunci";
+        return "redirect:/annuncio/miei";
     }
 
     // --- 5. MODIFICA ---
@@ -100,14 +95,10 @@ public class AnnuncioController {
 
     // --- I MIEI ANNUNCI ---
     @GetMapping("/miei")
-    public String showMyAnnunci(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+    public String showMyAnnunci(Model model, Principal principal) {
+        model.addAttribute("annunci", annuncioService.findByAutoreEmail(principal.getName()));
 
-        // Il service filtra per email dell'autore
-        model.addAttribute("annunci", annuncioService.findByAutoreEmail(email));
-
-        return "mieiAnnunci"; // Assicurati di avere questo template o usa "bacheca" se condividono la vista
+        return "mieiAnnunci";
     }
 
     @GetMapping("/{id}")
