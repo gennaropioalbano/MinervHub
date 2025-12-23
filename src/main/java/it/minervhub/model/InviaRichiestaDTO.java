@@ -9,7 +9,6 @@ public class InviaRichiestaDTO {
     @NotNull(message = "L'ID dell'annuncio è obbligatorio")
     private Long idAnnuncio;
 
-    @NotBlank(message = "Il messaggio non può essere vuoto")
     @Size(max = 500, message = "Il messaggio non può superare i 500 caratteri")
     private String messaggio;
 
