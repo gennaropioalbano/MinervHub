@@ -70,7 +70,15 @@
                         <button type="submit" class="btn btn-primary" th:text="${annuncioDto.id != null} ? 'Aggiorna' : 'Crea'">Crea</button>
                     </div>
                     <div class="col-sm-4 d-grid">
-                        <a class="btn btn-outline-primary" th:href="@{/annuncio/miei}"  role="button">Annulla</a>
+                        <a class="btn btn-outline-primary"
+                           th:if="${annuncio != null and annuncio.id != null}"
+                           th:href="@{/annuncio/{id}(id=${annuncio.id})}"
+                           role="button">Annulla</a>
+
+                        <a class="btn btn-outline-primary"
+                           th:if="${annuncio == null or annuncio.id == null}"
+                           th:href="@{/annuncio/miei}"
+                           role="button">Annulla</a>
                     </div>
                 </div>
             </form>

@@ -25,8 +25,8 @@ public class AnnuncioController {
     @Autowired
     private AnnuncioService annuncioService;
 
-    @GetMapping("/annuncio/{id}")
-    public String annuncio(@PathVariable Long id, Model model) {
+    @GetMapping("/{id}")
+    public String mostraAnnuncio(@PathVariable Long id, Model model) {
 
         Annuncio annuncio = annuncioService.getAnnuncioById(id);
 
@@ -35,13 +35,17 @@ public class AnnuncioController {
         }
 
         model.addAttribute("annuncio", annuncio);
+
+        model.addAttribute("mostraPublisher", false);
+
         return "annuncio";
     }
 
-    // --- CREAZIONE ---
     @GetMapping("/creaAnnuncio")
-    public String showCreatePage(Model model) {
+    public String mostraFormAnnuncio(Model model) {
+
         model.addAttribute("annuncioDto", new AnnuncioDto());
+
         return "/creaAnnuncio";
     }
 
@@ -60,7 +64,6 @@ public class AnnuncioController {
         return "redirect:/annuncio/miei";
     }
 
-    // --- 5. MODIFICA ---
     @GetMapping("/modificaAnnuncio/{id}")
     public String showEditPage(@PathVariable Long id, Model model) {
         Optional<Annuncio> annuncioOpt = Optional.ofNullable(annuncioService.getAnnuncioById(id));
@@ -81,7 +84,7 @@ public class AnnuncioController {
             @PathVariable Long id,
             @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
             BindingResult bindingResult,
-            Principal principal) {
+            Principal principal, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "/modificaAnnuncio";
@@ -89,7 +92,9 @@ public class AnnuncioController {
 
         annuncioService.modificaAnnuncio(id, dto, principal.getName());
 
-        return "redirect:/annuncio/miei";
+        model.addAttribute("mostraPublisher", false);
+
+        return "redirect:/annuncio/{id}";
     }
 
     @GetMapping("/delete/{id}")
@@ -100,26 +105,9 @@ public class AnnuncioController {
 
     @GetMapping("/miei")
     public String showMyAnnunci(Model model, Principal principal) {
+
         model.addAttribute("annunci", annuncioService.findByAutoreEmail(principal.getName()));
 
         return "mieiAnnunci";
-    }
-
-    @GetMapping("/{id}")
-    public String showAnnuncioDetail(@PathVariable Long id, Model model) {
-
-        Optional<Annuncio> annuncioOpt = Optional.ofNullable(annuncioService.getAnnuncioById(id));
-
-        if (annuncioOpt.isEmpty()) {
-            return "error/404";
-        }
-
-        Annuncio annuncio = annuncioOpt.get();
-        model.addAttribute("annuncio", annuncio);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("currentUsername", auth.getName());
-
-        return "mioAnnuncio"; // UNICA vista di dettaglio
     }
 }

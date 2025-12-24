@@ -104,17 +104,17 @@
         <div class="owner-actions" sec:authorize="isAuthenticated()"
              th:if="${annuncio.autore.email == #authentication.name}"
              style="margin-top: 2rem;">
-            <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b;">
+            <a th:href="@{/annuncio/modificaAnnuncio/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b;">
                 <i class="fa-solid fa-pen"></i> Modifica
             </a>
-            <a th:href="@{/annunci/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444;"
+            <a th:href="@{/annuncio/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444;"
                onclick="return confirm('Sei sicuro?');">
                 <i class="fa-solid fa-trash"></i> Elimina
             </a>
         </div>
     </section>
 
-    <aside class="publisher-sidebar">
+    <aside class="publisher-sidebar" th:if="${mostraPublisher}">
         <div class="publisher-card">
             <h3>Pubblicato da</h3>
             <div class="publisher-info">

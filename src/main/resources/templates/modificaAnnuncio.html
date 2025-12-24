@@ -86,7 +86,19 @@
                         <button type="submit" class="btn btn-primary">Salva</button>
                     </div>
                     <div class="col-sm-4 d-grid">
-                        <a class="btn btn-outline-primary" th:href="@{/annuncio/miei}" role="button">Annulla</a>
+                        <a class="btn btn-outline-primary"
+                           th:if="${annuncioDto.id != null}"
+                           th:href="@{/annuncio/{id}(id=*{id})}"
+                           role="button">
+                            Annulla
+                        </a>
+
+                        <a class="btn btn-outline-primary"
+                           th:if="${annuncioDto.id == null}"
+                           th:href="@{/annuncio/miei}"
+                           role="button">
+                            Annulla
+                        </a>
                     </div>
                 </div>
 
