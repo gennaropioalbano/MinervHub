@@ -43,7 +43,7 @@ public class AnnuncioService {
         return annuncioRepository.findByAutore(utente);
     }
 
-    public void save(AnnuncioDto dto, String email) {
+    public void modificaAnnuncio(AnnuncioDto dto, String email) {
         Utente utente =  utenteRepository.findByEmail(email);
 
         Annuncio annuncio = new Annuncio();
@@ -58,6 +58,32 @@ public class AnnuncioService {
                 dto.getScambio() == null || dto.getScambio().isBlank()
                     ? Collections.emptyList()
                     : Arrays.stream(dto.getScambio().split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isBlank())
+                        .toList()
+        );
+
+        annuncioRepository.save(annuncio);
+    }
+
+    public void modificaAnnuncio(Long id, AnnuncioDto dto, String email) {
+
+        Annuncio annuncio = annuncioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Annuncio non trovato"));
+
+        if (!annuncio.getAutore().getEmail().equals(email)) {
+            throw new RuntimeException("Non autorizzato");
+        }
+
+        annuncio.setTitolo(dto.getTitolo());
+        annuncio.setDescrizione(dto.getDescrizione());
+        annuncio.setEsame(dto.getEsame());
+        annuncio.setCorsoLaurea(dto.getCorsoLaurea());
+        annuncio.setTariffaOraria(dto.getTariffaOraria());
+        annuncio.setScambio(
+                dto.getScambio() == null || dto.getScambio().isBlank()
+                        ? Collections.emptyList()
+                        : Arrays.stream(dto.getScambio().split(","))
                         .map(String::trim)
                         .filter(s -> !s.isBlank())
                         .toList()

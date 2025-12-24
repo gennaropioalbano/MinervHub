@@ -1,3 +1,7 @@
+main {
+    height: 100vh;
+}
+
 .announcements-list {
     display: flex;
     justify-content: center;

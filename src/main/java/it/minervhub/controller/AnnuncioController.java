@@ -16,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -57,7 +55,7 @@ public class AnnuncioController {
             return "/creaAnnuncio";
         }
 
-        annuncioService.save(dto, principal.getName());
+        annuncioService.modificaAnnuncio(dto, principal.getName());
 
         return "redirect:/annuncio/miei";
     }
@@ -68,7 +66,7 @@ public class AnnuncioController {
         Optional<Annuncio> annuncioOpt = Optional.ofNullable(annuncioService.getAnnuncioById(id));
 
         if (annuncioOpt.isEmpty()) {
-            return "redirect:/annuncio/miei";
+            return "/modificaAnnuncio";
         }
 
         AnnuncioDto dto = annuncioService.mapEntityToDto(annuncioOpt.get());
@@ -78,35 +76,28 @@ public class AnnuncioController {
         return "modificaAnnuncio";
     }
 
-    @PostMapping("/eliminaAnnuncio/{id}")
-    public String editAnnuncio(
+    @PostMapping("/modificaAnnuncio/{id}")
+    public String modificaAnnuncio(
             @PathVariable Long id,
             @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
-            BindingResult result,
-            Model model) {
+            BindingResult bindingResult,
+            Principal principal) {
 
-        if (result.hasErrors()) {
-            model.addAttribute("annuncioId", id);
-            return "modificaAnnuncio";
+        if (bindingResult.hasErrors()) {
+            return "/modificaAnnuncio";
         }
 
-        boolean successo = annuncioService.updateAnnuncio(id, dto);
+        annuncioService.modificaAnnuncio(id, dto, principal.getName());
 
-        if (!successo) {
-            return "redirect:/annunci";
-        }
-
-        return "redirect:/annunci";
+        return "redirect:/annuncio/miei";
     }
 
-    // --- 6. ELIMINAZIONE ---
     @GetMapping("/delete/{id}")
     public String deleteAnnuncio(@PathVariable Long id) {
         annuncioService.eliminaAnnuncio(id);
         return "redirect:/annuncio/miei";
     }
 
-    // --- I MIEI ANNUNCI ---
     @GetMapping("/miei")
     public String showMyAnnunci(Model model, Principal principal) {
         model.addAttribute("annunci", annuncioService.findByAutoreEmail(principal.getName()));

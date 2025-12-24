@@ -15,7 +15,7 @@
         <div class="col-md-8 mx-auto rounded border p-4 m-4">
             <h2 class="text-center mb-5">Modifica Annuncio</h2>
 
-            <form method="post" th:action="@{'/annunci/edit/' + ${annuncioId}}" th:object="${annuncioDto}">
+            <form method="post" th:action="@{'/annuncio/modificaAnnuncio/' + ${annuncioId}}" th:object="${annuncioDto}">
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}">
@@ -86,7 +86,7 @@
                         <button type="submit" class="btn btn-primary">Salva</button>
                     </div>
                     <div class="col-sm-4 d-grid">
-                        <a class="btn btn-outline-primary" href="/annunci" role="button">Annulla</a>
+                        <a class="btn btn-outline-primary" th:href="@{/annuncio/miei}" role="button">Annulla</a>
                     </div>
                 </div>
 
