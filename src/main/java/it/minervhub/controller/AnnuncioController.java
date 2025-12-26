@@ -125,16 +125,15 @@ public class AnnuncioController {
      */
     @PostMapping("/modificaAnnuncio/{id}")
     public String modificaAnnuncio(
-            @PathVariable Long id,
             @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
             BindingResult bindingResult,
             Principal principal, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "/modificaAnnuncio";
+            return "modificaAnnuncio";
         }
 
-        annuncioService.modificaAnnuncio(id, dto, principal.getName());
+        annuncioService.modificaAnnuncio(dto.getId(), dto, principal.getName());
 
         model.addAttribute("mostraPublisher", false);
 
