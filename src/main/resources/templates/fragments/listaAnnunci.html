@@ -5,18 +5,17 @@
         </a>
         <article class="announcement-card" th:each="annuncio : ${annunci}">
             <div class="announcement-top">
-            <div class="announcement-card__header">
-                <div class="announcement-card__author">
-                    <i class="fa-solid fa-user"></i>
-                    <span class="announcement-card__name">Marco Rossi</span>
+                <div class="announcement-card__header">
+                    <div class="announcement-card__author">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="announcement-card__name" th:text="${annuncio.autore.nome}"></span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="announcement-card__body">
-                <h3 class="announcement-card__title" th:text="${annuncio.titolo}"></h3>
-                <p class="announcement-card__description" th:text="${annuncio.descrizione}">
-                </p>
-            </div>
+                <div class="announcement-card__body">
+                    <h3 class="announcement-card__title" th:text="${annuncio.titolo}"></h3>
+                    <p class="announcement-card__description" th:text="${annuncio.descrizione}"></p>
+                </div>
             </div>
 
             <div class="announcement-card__footer">

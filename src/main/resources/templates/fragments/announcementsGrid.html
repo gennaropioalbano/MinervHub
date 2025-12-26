@@ -36,7 +36,7 @@
             </a>
 
             <div th:if="${isPersonal}" class="card__actions">
-                <a th:href="@{/annunci/edit/{id}(id=${annuncio.id})}" class="card__btn card__btn--edit">
+                <a th:href="@{/annuncio/modificaAnnuncio/{id}(id=${annuncio.id})}" class="card__btn card__btn--edit">
                     <i class="fa-solid fa-pen"></i>
                 </a>
                 <a th:href="@{/annuncio/delete/{id}(id=${annuncio.id})}"
