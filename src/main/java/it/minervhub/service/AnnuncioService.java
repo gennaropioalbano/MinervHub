@@ -1,5 +1,6 @@
 package it.minervhub.service;
 
+import it.minervhub.exceptions.AnnuncioException;
 import it.minervhub.model.Annuncio;
 import it.minervhub.model.AnnuncioDto;
 import it.minervhub.model.Utente;
@@ -70,8 +71,12 @@ public class AnnuncioService {
      * @param dto DTO contenente i dati dell'annuncio
      * @param email email dell'utente autore
      */
-    public void modificaAnnuncio(AnnuncioDto dto, String email) {
+    public void creaAnnuncio(AnnuncioDto dto, String email) {
+
+        validaAnnuncio(dto);
+
         Utente utente =  utenteRepository.findByEmail(email);
+        if (utente == null) throw new IllegalArgumentException("Utente non trovato");
 
         Annuncio annuncio = new Annuncio();
         annuncio.setAutore(utente);
@@ -105,11 +110,13 @@ public class AnnuncioService {
      */
     public void modificaAnnuncio(Long id, AnnuncioDto dto, String email) {
 
+        validaAnnuncio(dto);
+
         Annuncio annuncio = annuncioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Annuncio non trovato"));
 
         if (!annuncio.getAutore().getEmail().equals(email)) {
-            throw new RuntimeException("Non autorizzato");
+            throw new RuntimeException("Utente non autorizzato");
         }
 
         annuncio.setTitolo(dto.getTitolo());
@@ -129,30 +136,6 @@ public class AnnuncioService {
         );
 
         annuncioRepository.save(annuncio);
-    }
-
-    /**
-     * Aggiorna un annuncio esistente se presente nel database.
-     *
-     * @param id identificativo dell'annuncio
-     * @param dto DTO contenente i dati aggiornati
-     * @return true se l'annuncio è stato aggiornato, false se non esiste
-     */
-    public boolean updateAnnuncio(Long id, AnnuncioDto dto) {
-        Optional<Annuncio> annuncioOpt = annuncioRepository.findById(id);
-
-        if (annuncioOpt.isEmpty()) {
-            return false; // Annuncio non trovato
-        }
-
-        Annuncio annuncio = annuncioOpt.get();
-
-        // Aggiorniamo i campi usando lo stesso helper
-        mapDtoToEntity(dto, annuncio);
-
-        // Nota: Non cambiamo l'autore e non cambiamo "disponibile" qui se non richiesto
-        annuncioRepository.save(annuncio);
-        return true;
     }
 
     /**
@@ -177,6 +160,7 @@ public class AnnuncioService {
      */
     public AnnuncioDto mapEntityToDto(Annuncio annuncio) {
         AnnuncioDto dto = new AnnuncioDto();
+        dto.setId(annuncio.getId());
         dto.setTitolo(annuncio.getTitolo());
         dto.setDescrizione(annuncio.getDescrizione());
         dto.setEsame(annuncio.getEsame());
@@ -214,5 +198,20 @@ public class AnnuncioService {
         } else {
             annuncio.setScambio(null);
         }
+    }
+
+    private void validaAnnuncio(AnnuncioDto dto) {
+        if (dto.getTitolo() == null || dto.getTitolo().isBlank() || dto.getTitolo().length() > 50)
+            throw new AnnuncioException("Titolo non valido");
+        if (dto.getDescrizione() == null || dto.getDescrizione().isBlank() || dto.getDescrizione().length() > 150)
+            throw new AnnuncioException("Descrizione non valida");
+        if (dto.getEsame() == null || dto.getEsame().isBlank() || dto.getEsame().length() > 50)
+            throw new AnnuncioException("Esame non valido");
+        if (dto.getCorsoLaurea() == null || dto.getCorsoLaurea().isBlank() || dto.getCorsoLaurea().length() > 50)
+            throw new AnnuncioException("Corso di laurea non valido");
+        if (dto.getTariffaOraria() < 5 || dto.getTariffaOraria() > 50)
+            throw new AnnuncioException("Tariffa non valida");
+        if (dto.getScambio() != null && dto.getScambio().length() > 150)
+            throw new AnnuncioException("Scambio troppo lungo");
     }
 }

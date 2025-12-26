@@ -86,7 +86,7 @@ public class AnnuncioController {
             return "/creaAnnuncio";
         }
 
-        annuncioService.modificaAnnuncio(dto, principal.getName());
+        annuncioService.creaAnnuncio(dto, principal.getName());
 
         return "redirect:/annuncio/miei";
     }

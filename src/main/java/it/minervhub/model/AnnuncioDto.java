@@ -48,8 +48,8 @@ public class AnnuncioDto {
      * Tariffa oraria richiesta per il servizio.
      */
     @NotNull(message = "La tariffa è obbligatoria")
-    @Min(value = 5, message = "La tariffa minima è 5€")
-    @Max(value = 50, message = "La tariffa massima è 50€")
+    @Min(value = 5, message = "Tariffa troppo bassa")
+    @Max(value = 50, message = "Tariffa troppo alta")
     private Integer tariffaOraria;
 
     /**

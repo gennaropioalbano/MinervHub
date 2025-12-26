@@ -1,13 +1,11 @@
 package it.minervhub.service;
 
+import it.minervhub.exceptions.AnnuncioException;
 import it.minervhub.model.Annuncio;
 import it.minervhub.model.AnnuncioDto;
 import it.minervhub.model.Utente;
 import it.minervhub.repository.AnnuncioRepository;
 import it.minervhub.repository.UtenteRepository;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,41 +22,100 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AnnuncioServiceTest {
 
-    private Validator validator;
+    @Mock
+    private AnnuncioRepository annuncioRepository;
+
+    @Mock
+    private UtenteRepository utenteRepository;
+
+    @InjectMocks
+    private AnnuncioService annuncioService;
+
+    private Utente utente;
+    private Annuncio annuncio;
+    private AnnuncioDto dto;
 
     @BeforeEach
-    void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+    void setup() {
+        utente = new Utente();
+        utente.setEmail("test@example.com");
+
+        annuncio = new Annuncio();
+        annuncio.setId(1L);
+        annuncio.setAutore(utente);
+
+        dto = new AnnuncioDto();
+        dto.setTitolo("Titolo valido");
+        dto.setDescrizione("Descrizione valida");
+        dto.setEsame("Esame valido");
+        dto.setCorsoLaurea("Corso valido");
+        dto.setTariffaOraria(20);
+        dto.setScambio("Libro1, Libro2");
     }
 
     @Test
-    void titoloVuoto_shouldFailValidation() {
-        AnnuncioDto dto = new AnnuncioDto();
-        dto.setTitolo(""); // titolo vuoto
-        dto.setDescrizione("Una descrizione valida");
-        dto.setEsame("Matematica");
-        dto.setCorsoLaurea("Ingegneria");
-        dto.setTariffaOraria(10);
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("obbligatorio")));
+    void testCreaAnnuncioConUtenteNonEsistente() {
+        when(utenteRepository.findByEmail("nonexistent@example.com")).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> annuncioService.creaAnnuncio(dto, "nonexistent@example.com"));
     }
 
     @Test
-    void titoloTroppoLungo_shouldFailValidation() {
-        AnnuncioDto dto = new AnnuncioDto();
-        dto.setTitolo("T".repeat(100)); // titolo troppo lungo
-        dto.setDescrizione("Una descrizione valida");
-        dto.setEsame("Matematica");
-        dto.setCorsoLaurea("Ingegneria");
-        dto.setTariffaOraria(10);
+    void testModificaAnnuncioValido() {
+        when(annuncioRepository.findById(1L)).thenReturn(Optional.of(annuncio));
+        annuncioService.modificaAnnuncio(1L, dto, "test@example.com");
+        verify(annuncioRepository).save(any(Annuncio.class));
+        assertEquals("Titolo valido", annuncio.getTitolo());
+    }
 
-        var violations = validator.validate(dto);
+    @Test
+    void testModificaAnnuncioNonAutorizzato() {
+        when(annuncioRepository.findById(1L)).thenReturn(Optional.of(annuncio));
+        assertThrows(RuntimeException.class,
+                () -> annuncioService.modificaAnnuncio(1L, dto, "altro@example.com"));
+    }
 
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("troppo lungo")));
+    @Test
+    void testModificaAnnuncioTitoloTroppoLungo() {
+        when(annuncioRepository.findById(1L)).thenReturn(Optional.of(annuncio));
+        dto.setTitolo("T".repeat(51)); // oltre 50 caratteri
+        assertThrows(AnnuncioException.class,
+                () -> annuncioService.modificaAnnuncio(1L, dto, "test@example.com"));
+    }
+
+    @Test
+    void testModificaAnnuncioDescrizioneVuota() {
+        when(annuncioRepository.findById(1L)).thenReturn(Optional.of(annuncio));
+        dto.setDescrizione("");
+        assertThrows(AnnuncioException.class,
+                () -> annuncioService.modificaAnnuncio(1L, dto, "test@example.com"));
+    }
+
+    @Test
+    void testFindByAutoreEmailUtenteEsistente() {
+        when(utenteRepository.findByEmail("test@example.com")).thenReturn(utente);
+        when(annuncioRepository.findByAutore(utente)).thenReturn(List.of(annuncio));
+        List<Annuncio> result = annuncioService.findByAutoreEmail("test@example.com");
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindByAutoreEmailUtenteNonEsistente() {
+        when(utenteRepository.findByEmail("nonexistent@example.com")).thenReturn(null);
+        List<Annuncio> result = annuncioService.findByAutoreEmail("nonexistent@example.com");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testEliminaAnnuncioEsistente() {
+        when(annuncioRepository.existsById(1L)).thenReturn(true);
+        annuncioService.eliminaAnnuncio(1L);
+        verify(annuncioRepository).deleteById(1L);
+    }
+
+    @Test
+    void testEliminaAnnuncioNonEsistente() {
+        when(annuncioRepository.existsById(2L)).thenReturn(false);
+        annuncioService.eliminaAnnuncio(2L);
+        verify(annuncioRepository, never()).deleteById(2L);
     }
 }
