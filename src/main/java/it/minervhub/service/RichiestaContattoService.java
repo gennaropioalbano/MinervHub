@@ -71,6 +71,10 @@ public class RichiestaContattoService {
             throw new IllegalArgumentException("Hai già una richiesta in attesa.");
         }
 
+        if (dto.getMessaggio() != null && dto.getMessaggio().length() > 200) {
+            throw new IllegalArgumentException("Il messaggio non può superare i 200 caratteri.");
+        }
+
         // 4. Salvataggio
         RichiestaContatto richiesta = new RichiestaContatto();
         richiesta.setMessaggio(dto.getMessaggio());
@@ -164,8 +168,6 @@ public class RichiestaContattoService {
 
         richiestaRepository.save(richiesta);
     }
-
-    // ... altri metodi ...
 
     @Transactional
     public void annullaRichiesta(Long idRichiesta, String emailAllievo) {
