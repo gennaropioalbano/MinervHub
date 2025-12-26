@@ -14,27 +14,48 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service che gestisce la logica di business relativa agli annunci.
+ * Si occupa della creazione, modifica, eliminazione e recupero
+ * degli annunci, oltre alla conversione tra Entity e DTO.
+ */
 @Service
 public class AnnuncioService {
 
+    /** Repository per la gestione degli annunci */
     @Autowired
     private AnnuncioRepository annuncioRepository;
 
+    /** Repository per la gestione degli utenti */
     @Autowired
     private UtenteRepository utenteRepository;
 
-    // Recupera tutti gli annunci ordinati per ID decrescente
+    /**
+     * Recupera tutti gli annunci ordinati per ID in ordine decrescente.
+     *
+     * @return lista di annunci
+     */
     public List<Annuncio> findAll() {
         return annuncioRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-
+    /**
+     * Recupera un annuncio tramite il suo identificativo.
+     *
+     * @param id identificativo dell'annuncio
+     * @return annuncio trovato oppure null se non esiste
+     */
     public Annuncio getAnnuncioById(Long id) {
         Optional<Annuncio> annuncio = annuncioRepository.findById(id);
         return annuncio.orElse(null);
     }
 
-    // Recupera gli annunci di uno specifico utente (tramite email)
+    /**
+     * Recupera tutti gli annunci creati da un utente identificato tramite email.
+     *
+     * @param email email dell'autore
+     * @return lista di annunci dell'utente oppure lista vuota se non trovato
+     */
     public List<Annuncio> findByAutoreEmail(String email) {
         Utente utente = utenteRepository.findByEmail(email);
         if (utente == null) {
@@ -43,6 +64,12 @@ public class AnnuncioService {
         return annuncioRepository.findByAutore(utente);
     }
 
+    /**
+     * Crea un nuovo annuncio associandolo all'utente autenticato.
+     *
+     * @param dto DTO contenente i dati dell'annuncio
+     * @param email email dell'utente autore
+     */
     public void modificaAnnuncio(AnnuncioDto dto, String email) {
         Utente utente =  utenteRepository.findByEmail(email);
 
@@ -54,6 +81,8 @@ public class AnnuncioService {
         annuncio.setCorsoLaurea(dto.getCorsoLaurea());
         annuncio.setTariffaOraria(dto.getTariffaOraria());
         annuncio.setDisponibile(true);
+
+        // Conversione stringa scambio -> lista
         annuncio.setScambio(
                 dto.getScambio() == null || dto.getScambio().isBlank()
                     ? Collections.emptyList()
@@ -66,6 +95,14 @@ public class AnnuncioService {
         annuncioRepository.save(annuncio);
     }
 
+    /**
+     * Modifica un annuncio esistente se l'utente è autorizzato.
+     *
+     * @param id identificativo dell'annuncio
+     * @param dto DTO contenente i dati aggiornati
+     * @param email email dell'utente autenticato
+     * @throws RuntimeException se l'annuncio non esiste o l'utente non è autorizzato
+     */
     public void modificaAnnuncio(Long id, AnnuncioDto dto, String email) {
 
         Annuncio annuncio = annuncioRepository.findById(id)
@@ -80,6 +117,8 @@ public class AnnuncioService {
         annuncio.setEsame(dto.getEsame());
         annuncio.setCorsoLaurea(dto.getCorsoLaurea());
         annuncio.setTariffaOraria(dto.getTariffaOraria());
+
+        // Conversione stringa scambio -> lista
         annuncio.setScambio(
                 dto.getScambio() == null || dto.getScambio().isBlank()
                         ? Collections.emptyList()
@@ -92,7 +131,13 @@ public class AnnuncioService {
         annuncioRepository.save(annuncio);
     }
 
-    // MODIFICA ANNUNCIO: Aggiorna solo se esiste
+    /**
+     * Aggiorna un annuncio esistente se presente nel database.
+     *
+     * @param id identificativo dell'annuncio
+     * @param dto DTO contenente i dati aggiornati
+     * @return true se l'annuncio è stato aggiornato, false se non esiste
+     */
     public boolean updateAnnuncio(Long id, AnnuncioDto dto) {
         Optional<Annuncio> annuncioOpt = annuncioRepository.findById(id);
 
@@ -110,16 +155,26 @@ public class AnnuncioService {
         return true;
     }
 
-    // CANCELLAZIONE
+    /**
+     * Elimina un annuncio se esiste.
+     *
+     * @param id identificativo dell'annuncio
+     */
     public void eliminaAnnuncio(Long id) {
         if (annuncioRepository.existsById(id)) {
             annuncioRepository.deleteById(id);
         }
     }
 
-    // --- METODI DI UTILITÀ (HELPER) ---
+    // ---------------- METODI DI UTILITÀ ----------------
 
-    // Converte l'Entità in DTO (utile per pre-popolare il form di Modifica)
+    /**
+     * Converte un'entità Annuncio in AnnuncioDto.
+     * Utilizzato per pre-popolare il form di modifica.
+     *
+     * @param annuncio entità annuncio
+     * @return DTO popolato
+     */
     public AnnuncioDto mapEntityToDto(Annuncio annuncio) {
         AnnuncioDto dto = new AnnuncioDto();
         dto.setTitolo(annuncio.getTitolo());
@@ -135,7 +190,13 @@ public class AnnuncioService {
         return dto;
     }
 
-    // Converte il DTO in Entità (logica comune per Create e Edit)
+    /**
+     * Converte un DTO in entità Annuncio.
+     * Metodo di supporto comune per creazione e modifica.
+     *
+     * @param dto DTO contenente i dati
+     * @param annuncio entità da aggiornare
+     */
     private void mapDtoToEntity(AnnuncioDto dto, Annuncio annuncio) {
         annuncio.setTitolo(dto.getTitolo());
         annuncio.setDescrizione(dto.getDescrizione());
