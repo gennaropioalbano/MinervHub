@@ -2,7 +2,7 @@ package it.minervhub.service;
 
 import it.minervhub.exceptions.AnnuncioException;
 import it.minervhub.model.Annuncio;
-import it.minervhub.model.AnnuncioDto;
+import it.minervhub.model.AnnuncioDTO;
 import it.minervhub.model.Utente;
 import it.minervhub.repository.AnnuncioRepository;
 import it.minervhub.repository.UtenteRepository;
@@ -71,7 +71,7 @@ public class AnnuncioService {
      * @param dto DTO contenente i dati dell'annuncio
      * @param email email dell'utente autore
      */
-    public void creaAnnuncio(AnnuncioDto dto, String email) {
+    public void creaAnnuncio(AnnuncioDTO dto, String email) {
 
         validaAnnuncio(dto);
 
@@ -108,7 +108,7 @@ public class AnnuncioService {
      * @param email email dell'utente autenticato
      * @throws RuntimeException se l'annuncio non esiste o l'utente non è autorizzato
      */
-    public void modificaAnnuncio(Long id, AnnuncioDto dto, String email) {
+    public void modificaAnnuncio(Long id, AnnuncioDTO dto, String email) {
 
         validaAnnuncio(dto);
 
@@ -158,8 +158,8 @@ public class AnnuncioService {
      * @param annuncio entità annuncio
      * @return DTO popolato
      */
-    public AnnuncioDto mapEntityToDto(Annuncio annuncio) {
-        AnnuncioDto dto = new AnnuncioDto();
+    public AnnuncioDTO mapEntityToDto(Annuncio annuncio) {
+        AnnuncioDTO dto = new AnnuncioDTO();
         dto.setId(annuncio.getId());
         dto.setTitolo(annuncio.getTitolo());
         dto.setDescrizione(annuncio.getDescrizione());
@@ -181,7 +181,7 @@ public class AnnuncioService {
      * @param dto DTO contenente i dati
      * @param annuncio entità da aggiornare
      */
-    private void mapDtoToEntity(AnnuncioDto dto, Annuncio annuncio) {
+    private void mapDtoToEntity(AnnuncioDTO dto, Annuncio annuncio) {
         annuncio.setTitolo(dto.getTitolo());
         annuncio.setDescrizione(dto.getDescrizione());
         annuncio.setEsame(dto.getEsame());
@@ -200,7 +200,7 @@ public class AnnuncioService {
         }
     }
 
-    private void validaAnnuncio(AnnuncioDto dto) {
+    private void validaAnnuncio(AnnuncioDTO dto) {
         if (dto.getTitolo() == null || dto.getTitolo().isBlank() || dto.getTitolo().length() > 50)
             throw new AnnuncioException("Titolo non valido");
         if (dto.getDescrizione() == null || dto.getDescrizione().isBlank() || dto.getDescrizione().length() > 150)

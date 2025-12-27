@@ -8,7 +8,7 @@ import jakarta.validation.constraints.*;
  * Contiene esclusivamente i dati inseriti dall'utente e le relative
  * regole di validazione.
  */
-public class AnnuncioDto {
+public class AnnuncioDTO {
 
     /**
      * Identificativo dell'annuncio.

@@ -1,15 +1,10 @@
 package it.minervhub.controller;
 
 import it.minervhub.model.Annuncio;
-import it.minervhub.model.AnnuncioDto;
-import it.minervhub.model.Utente;
+import it.minervhub.model.AnnuncioDTO;
 import it.minervhub.service.AnnuncioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,7 +58,7 @@ public class AnnuncioController {
     @GetMapping("/creaAnnuncio")
     public String mostraFormAnnuncio(Model model) {
 
-        model.addAttribute("annuncioDto", new AnnuncioDto());
+        model.addAttribute("annuncioDto", new AnnuncioDTO());
 
         return "/creaAnnuncio";
     }
@@ -78,7 +73,7 @@ public class AnnuncioController {
      */
     @PostMapping("/creaAnnuncio")
     public String creaAnnuncio(
-            @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
+            @Valid @ModelAttribute("annuncioDto") AnnuncioDTO dto,
             BindingResult bindingResult,
             Principal principal) {
 
@@ -106,7 +101,7 @@ public class AnnuncioController {
             return "/modificaAnnuncio";
         }
 
-        AnnuncioDto dto = annuncioService.mapEntityToDto(annuncioOpt.get());
+        AnnuncioDTO dto = annuncioService.mapEntityToDto(annuncioOpt.get());
         model.addAttribute("annuncioDto", dto);
         model.addAttribute("annuncioId", id);
 
@@ -125,7 +120,7 @@ public class AnnuncioController {
      */
     @PostMapping("/modificaAnnuncio/{id}")
     public String modificaAnnuncio(
-            @Valid @ModelAttribute("annuncioDto") AnnuncioDto dto,
+            @Valid @ModelAttribute("annuncioDto") AnnuncioDTO dto,
             BindingResult bindingResult,
             Principal principal, Model model) {
 
