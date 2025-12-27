@@ -188,4 +188,6 @@ public class RichiestaContattoService {
         // 4. Eliminazione fisica dal database
         richiestaRepository.delete(richiesta);
     }
+
+
 }

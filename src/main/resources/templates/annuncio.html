@@ -65,17 +65,13 @@
     </style>
 </head>
 <body>
+<div th:if="${errorMessage}" style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
+    <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
+</div>
 
 <header th:replace="~{fragments/navbar :: navFragment}"></header>
 
 <main class="detail-container">
-
-    <div th:if="${successMessage}" style="background:#d1fae5; color:#065f46; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
-        <i class="fa-solid fa-check-circle"></i> <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${errorMessage}" style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
-        <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
-    </div>
 
     <section class="announcement-main">
         <div class="announcement-image-box">
