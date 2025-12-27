@@ -68,7 +68,12 @@ class RichiestaContattoServiceTest {
         // SCENARIO: Il messaggio supera i 200 caratteri.
         // ORACOLO: L'invio non va a buon fine (Eccezione).
 
-        String messaggioLungo = "A".repeat(201); // Genera una stringa di 201 caratteri
+        String messaggioLungo = "Gentile Tutor, le scrivo in merito al suo annuncio pubblicato sulla " +
+                "bacheca di MinervHub. Sarei molto interessato ad intraprendere un percorso di studi " +
+                "con lei per migliorare le mie competenze linguistiche in vista di una certificazione " +
+                "importante che dovrei conseguire il mese prossimo. Ho notato che lei ha ottime recensioni " +
+                "e un curriculum di tutto rispetto. Potrebbe gentilmente indicarmi quali sono le sue tariffe " +
+                "orarie attuali e se è prevista la possibilità di effettuare una prima lezione conoscitiva gratuita?";
         richiestaDTO.setMessaggio(messaggioLungo);
 
         assertThrows(
@@ -102,7 +107,7 @@ class RichiestaContattoServiceTest {
         // SCENARIO: Il messaggio ha una lunghezza valida (tra 1 e 200).
         // ORACOLO: L'invio va a buon fine.
 
-        richiestaDTO.setMessaggio("Salve, vorrei informazioni sulle lezioni."); // ~45 caratteri
+        richiestaDTO.setMessaggio("Salve, vorrei partecipare alle sue lezioni.");
 
         // Eseguiamo il metodo
         assertDoesNotThrow(() ->
@@ -111,7 +116,7 @@ class RichiestaContattoServiceTest {
 
         // Verifica che il salvataggio sia avvenuto con i dati corretti
         verify(richiestaRepository, times(1)).save(argThat(richiesta ->
-                richiesta.getMessaggio().equals("Salve, vorrei informazioni sulle lezioni.") &&
+                richiesta.getMessaggio().equals("Salve, vorrei partecipare alle sue lezioni.") &&
                         richiesta.getAllievo().equals(allievo) &&
                         richiesta.getAnnuncio().equals(annuncio)
         ));
