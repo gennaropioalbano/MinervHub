@@ -53,6 +53,7 @@ public class BachecaController {
             @RequestParam(required = false) Integer tariffaMax,
             Model model
     ) {
+        long start = System.currentTimeMillis(); // ⏱️ INIZIO MISURA
 
         try {
 
@@ -74,6 +75,9 @@ public class BachecaController {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("annunci", bachecaService.getAnnunciDisponibili());
         }
+
+        long elapsed = System.currentTimeMillis() - start; // ⏱️ FINE MISURA
+        System.out.println("⏱️ Tempo risposta /bacheca: " + elapsed + " ms");
 
         return "bacheca";
     }
