@@ -41,4 +41,8 @@ public interface AnnuncioRepository extends JpaRepository<Annuncio, Long> {
     );
 
 
+    List<Annuncio> searchAnnuncioById(Long id);
+
+    List<Annuncio> findByAutoreAndDisponibile(Utente autore, boolean disponibile);
+
 }

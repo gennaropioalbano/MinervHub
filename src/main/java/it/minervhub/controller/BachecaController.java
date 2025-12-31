@@ -99,7 +99,7 @@ public class BachecaController {
 
         model.addAttribute("annuncio", annuncio);
 
-        model.addAttribute("mostraPublisher", true);
+        model.addAttribute("sezione", "bacheca");
 
         return "annuncio";
     }

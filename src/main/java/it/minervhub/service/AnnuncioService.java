@@ -6,6 +6,7 @@ import it.minervhub.model.AnnuncioDTO;
 import it.minervhub.model.Utente;
 import it.minervhub.repository.AnnuncioRepository;
 import it.minervhub.repository.UtenteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,8 @@ public class AnnuncioService {
      *
      * @return lista di annunci
      */
-    public List<Annuncio> findAll() {
-        return annuncioRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public List<Annuncio> getAnnunciDisponibili() {
+        return annuncioRepository.findByDisponibileTrue();
     }
 
     /**
@@ -57,12 +58,12 @@ public class AnnuncioService {
      * @param email email dell'autore
      * @return lista di annunci dell'utente oppure lista vuota se non trovato
      */
-    public List<Annuncio> findByAutoreEmail(String email) {
+    public List<Annuncio> findByAutoreEmailAndDisponibile(String email, boolean disponibile) {
         Utente utente = utenteRepository.findByEmail(email);
         if (utente == null) {
-            return List.of(); // Ritorna lista vuota se utente non trovato
+            return List.of(); // lista vuota se l'utente non esiste
         }
-        return annuncioRepository.findByAutore(utente);
+        return annuncioRepository.findByAutoreAndDisponibile(utente, disponibile);
     }
 
     /**
@@ -139,14 +140,18 @@ public class AnnuncioService {
     }
 
     /**
-     * Elimina un annuncio se esiste.
+     * Disattiva (soft delete) un annuncio rendendolo non disponibile.
      *
      * @param id identificativo dell'annuncio
      */
+    @Transactional
     public void eliminaAnnuncio(Long id) {
-        if (annuncioRepository.existsById(id)) {
-            annuncioRepository.deleteById(id);
-        }
+        Annuncio annuncio = annuncioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Annuncio non trovato"));
+
+        annuncio.setDisponibile(false);
+
+        annuncioRepository.save(annuncio);
     }
 
     // ---------------- METODI DI UTILITÀ ----------------

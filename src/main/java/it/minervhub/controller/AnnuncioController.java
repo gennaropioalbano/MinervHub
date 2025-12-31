@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,6 +26,13 @@ public class AnnuncioController {
     /** Service per la gestione della logica di business degli annunci */
     @Autowired
     private AnnuncioService annuncioService;
+
+    @GetMapping
+    public String mostraAnnunci(Model model) {
+        List<Annuncio> annunci = annuncioService.getAnnunciDisponibili();
+        model.addAttribute("annunci", annunci);
+        return "annunci"; // nome del template Thymeleaf
+    }
 
     /**
      * Mostra la pagina di dettaglio di un annuncio specifico.
@@ -105,7 +113,7 @@ public class AnnuncioController {
         model.addAttribute("annuncioDto", dto);
         model.addAttribute("annuncioId", id);
 
-        return "modificaAnnuncio";
+        return "creaAnnuncio";
     }
 
     /**
@@ -125,7 +133,7 @@ public class AnnuncioController {
             Principal principal, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "modificaAnnuncio";
+            return "creaAnnuncio";
         }
 
         annuncioService.modificaAnnuncio(dto.getId(), dto, principal.getName());
@@ -141,8 +149,8 @@ public class AnnuncioController {
      * @param id identificativo dell'annuncio
      * @return redirect alla lista degli annunci dell'utente
      */
-    @GetMapping("/delete/{id}")
-    public String deleteAnnuncio(@PathVariable Long id) {
+    @GetMapping("/eliminaAnnuncio/{id}")
+    public String eliminaAnnuncio(@PathVariable Long id) {
         annuncioService.eliminaAnnuncio(id);
         return "redirect:/annuncio/miei";
     }
@@ -156,9 +164,10 @@ public class AnnuncioController {
      */
     @GetMapping("/miei")
     public String showMyAnnunci(Model model, Principal principal) {
+        // Recupera solo gli annunci disponibili dell'utente loggato
+        List<Annuncio> annunci = annuncioService.findByAutoreEmailAndDisponibile(principal.getName(), true);
 
-        model.addAttribute("annunci", annuncioService.findByAutoreEmail(principal.getName()));
-
+        model.addAttribute("annunci", annunci);
         return "mieiAnnunci";
     }
 }

@@ -1,6 +1,6 @@
-<section class="announcements-list" th:fragment="listaAnnunci">
+<section class="announcements-list" th:fragment="listaAnnunci(sezione)">
     <div class="announcements-list__grid">
-        <a class="announcement-add" th:href="@{/annuncio/creaAnnuncio}">
+        <a th:if="${sezione == 'miei'}" class="announcement-add" th:href="@{/annuncio/creaAnnuncio}">
             <i class="fa-solid fa-plus"></i>
         </a>
         <article class="announcement-card" th:each="annuncio : ${annunci}">
@@ -23,7 +23,10 @@
                     <span class="announcement-card__amount" th:text="${annuncio.tariffaOraria}"></span>
                     <span class="announcement-card__unit">€/h</span>
                 </div>
-                <a class="announcement-card__button announcement-card__button--primary" th:href="@{/annuncio/{id}(id=${annuncio.id})}">
+
+                <a class="announcement-card__button announcement-card__button--primary"
+                   th:href="@{${sezione == 'bacheca' ? '/bacheca' : '/annuncio'} + '/' + ${annuncio.id}}"
+                   th:text="'Più dettagli'">
                     Più dettagli
                 </a>
             </div>

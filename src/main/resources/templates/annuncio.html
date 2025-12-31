@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/annuncio.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -79,14 +80,17 @@
 
     <section class="announcement-main">
         <div class="announcement-image-box">
-            <img src="/images/banner.jpg" alt="Anteprima" class="detail-img">
+            <img src="/images/patten.png" alt="Anteprima" class="detail-img">
         </div>
 
         <div class="announcement-header">
             <div class="title-row">
                 <h1 th:text="${annuncio.titolo}">Titolo</h1>
+                <div>
                 <span class="detail-price" th:if="${annuncio.tariffaOraria != null}"
-                      th:text="'€ ' + ${annuncio.tariffaOraria}">€ 0</span>
+                      th:text="${annuncio.tariffaOraria}"></span>
+                <span class="ora">€/ora</span>
+                </div>
             </div>
             <div class="meta-row">
                 <span class="category-tag"><i class="fa-solid fa-graduation-cap"></i> <span th:text="${annuncio.corsoLaurea}">Corso</span></span>
@@ -101,20 +105,37 @@
             <p th:text="${annuncio.descrizione}">Descrizione...</p>
         </div>
 
+        <div class="list-scambio">
+            <h3>Scambio</h3>
+
+            <!-- Lista non vuota -->
+            <ul th:if="${annuncio.scambio != null and !#lists.isEmpty(annuncio.scambio)}">
+                <li th:each="materia : ${annuncio.scambio}"
+                    th:text="${materia}">
+                </li>
+            </ul>
+
+            <!-- Lista vuota -->
+            <p th:if="${annuncio.scambio == null or #lists.isEmpty(annuncio.scambio)}">
+                Non disponibile
+            </p>
+        </div>
+
+
         <div class="owner-actions" sec:authorize="isAuthenticated()"
              th:if="${annuncio.autore.email == #authentication.name}"
              style="margin-top: 2rem;">
-            <a th:href="@{/annuncio/modificaAnnuncio/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #f59e0b;">
+            <a th:href="@{/annuncio/modificaAnnuncio/{id}(id=${annuncio.id})}" class="btn-primary">
                 <i class="fa-solid fa-pen"></i> Modifica
             </a>
-            <a th:href="@{/annuncio/delete/{id}(id=${annuncio.id})}" class="btn-primary" style="background-color: #ef4444;"
+            <a th:href="@{/annuncio/eliminaAnnuncio/{id}(id=${annuncio.id})}" class="btn-primary"
                onclick="return confirm('Sei sicuro?');">
                 <i class="fa-solid fa-trash"></i> Elimina
             </a>
         </div>
     </section>
 
-    <aside class="publisher-sidebar" th:if="${mostraPublisher}">
+    <aside class="publisher-sidebar" th:if="${sezione == 'bacheca'}">
         <div class="publisher-card">
             <h3>Pubblicato da</h3>
             <div class="publisher-info">
