@@ -105,3 +105,78 @@ a {
     font-size: medium;
     border: none;
 }
+/* --- Stili esistenti integrati con i nuovi --- */
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    position: relative; /* Necessario per il posizionamento del menu mobile */
+    background-color: var(--clr-white);
+    z-index: 1000;
+}
+
+/* Nascondiamo l'hamburger di default */
+.nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.nav__toggle-bar {
+    width: 25px;
+    height: 3px;
+    background-color: var(--clr-primary);
+    border-radius: 2px;
+}
+
+/* --- Media Query per Mobile --- */
+@media (max-width: 768px) {
+    .nav__toggle {
+        display: flex; /* Mostra l'hamburger */
+    }
+
+    .nav__right {
+        display: none; /* Nascondi il menu di default */
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Appare subito sotto la navbar */
+        left: 0;
+        width: 100%;
+        background-color: var(--clr-white);
+        padding: 20px;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        gap: 30px;
+    }
+
+    /* Classe che verrà aggiunta via JS */
+    .nav__right.is-active {
+        display: flex;
+    }
+
+    .nav__menu {
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+    }
+
+    .nav__toolbar {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav__toolbar-auth, .nav__toolbar-user {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav__toolbar-button {
+        text-align: center;
+        width: 100%;
+    }
+}

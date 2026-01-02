@@ -3,42 +3,28 @@
         <a th:href="@{/home}" class="nav__logo">MinervHub</a>
     </div>
 
-    <div class="nav__right">
+    <button class="nav__toggle" id="nav-toggle" aria-label="Apri menu">
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+    </button>
+
+    <div class="nav__right" id="nav-menu">
         <ul class="nav__menu">
-            <li class="nav__menu-item">
-                <a th:href="@{/bacheca}" class="nav__menu-link">
-                    Bacheca
-                </a>
-            </li>
-            <li class="nav__menu-item">
-                <a th:href="@{/annuncio/miei}" class="nav__menu-link">
-                    I miei annunci
-                </a>
-            </li>
-            <li class="nav__menu-item">
-                <a th:href="@{/richieste/mie}" class="nav__menu-link">
-                    Le mie richieste
-                </a>
-            </li>
+            <li class="nav__menu-item"><a th:href="@{/bacheca}" class="nav__menu-link">Bacheca</a></li>
+            <li class="nav__menu-item"><a th:href="@{/annuncio/miei}" class="nav__menu-link">I miei annunci</a></li>
+            <li class="nav__menu-item"><a th:href="@{/richieste/mie}" class="nav__menu-link">Le mie richieste</a></li>
         </ul>
         <div class="nav__toolbar">
             <div class="nav__toolbar-auth" sec:authorize="!isAuthenticated()">
-                <a href="/login" class="nav__toolbar-button nav__toolbar-button--secondary">
-                    Accedi
-                </a>
-                <a href="/register" class="nav__toolbar-button nav__toolbar-button--primary">
-                    Registrati
-                </a>
+                <a href="/login" class="nav__toolbar-button nav__toolbar-button--secondary">Accedi</a>
+                <a href="/register" class="nav__toolbar-button nav__toolbar-button--primary">Registrati</a>
             </div>
 
             <div class="nav__toolbar-user" sec:authorize="isAuthenticated()">
-                <a th:action="@{/profilo}" class="nav__toolbar-button nav__toolbar-button--profile">
-                    Utente
-                </a>
+                <a th:href="@{/profilo}" class="nav__toolbar-button nav__toolbar-button--profile">Utente</a>
                 <form th:action="@{/logout}" method="post" class="nav__toolbar-logout-form">
-                    <button type="submit" class="nav__toolbar-button nav__toolbar-button--logout">
-                        Esci
-                    </button>
+                    <button type="submit" class="nav__toolbar-button nav__toolbar-button--logout">Esci</button>
                 </form>
             </div>
         </div>
