@@ -29,12 +29,7 @@
         </div>
         <div class="mb-3">
             <label>Password:</label>
-            <input type="password"
-                   th:field="*{password}"
-                   class="form-control"
-                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
-                   title="La password deve contenere almeno 8 caratteri, una maiuscola, una minuscola, un numero e un carattere speciale"
-                   required/>
+            <input type="password" th:field="*{password}" class="form-control"/>
         </div>
         <button type="submit" class="btn btn-success">Registrati</button>
     </form>
