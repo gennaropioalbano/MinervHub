@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"it.minervhub"},{"l":"it.minervhub.config"},{"l":"it.minervhub.controller"},{"l":"it.minervhub.exceptions"},{"l":"it.minervhub.model"},{"l":"it.minervhub.repository"},{"l":"it.minervhub.service"}];updateSearchResults();
