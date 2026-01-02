@@ -87,7 +87,7 @@
 
         <div class="card-header">
             <div>
-                <a th:href="@{/annunci/{id}(id=${richiesta.annuncio.id})}" class="annuncio-link" th:text="${richiesta.annuncio.titolo}">Titolo</a>
+                <a th:href="@{/bacheca/{id}(id=${richiesta.annuncio.id})}" class="annuncio-link" th:text="${richiesta.annuncio.titolo}">Titolo</a>
 
                 <div th:if="${tipoCorrente == 'inviate'}" class="tutor-info">
                     <i class="fa-solid fa-user-tie"></i> A Tutor: <span th:text="${richiesta.tutor.nome} + ' ' + ${richiesta.tutor.cognome}"></span>
