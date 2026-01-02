@@ -91,7 +91,7 @@
 .announcement-card__title {
     font-size: 22px;
     font-weight: 800;
-    color: var(--color-black);
+    color: var(--clr-primary);
     margin-bottom: 12px;
     line-height: 1.3;
 }
@@ -119,13 +119,14 @@
 
 .announcement-card__price {
     display: flex;
-    flex-direction: column;
+    align-items: end;
+    gap: 5px;
 }
 
 .announcement-card__amount {
     font-size: 24px;
     font-weight: 800;
-    color: var(--color-black);
+    color: var(--clr-primary);
 }
 
 .announcement-card__unit {
@@ -136,7 +137,7 @@
 
 /* Bottone Dettagli (Scuro come "Apply now") */
 .announcement-card__button--primary {
-    background-color: var(--color-gray-700);
+    background-color: var(--clr-primary);
     color: var(--color-white);
     padding: 12px 24px;
     border-radius: 14px;
