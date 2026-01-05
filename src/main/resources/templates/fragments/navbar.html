@@ -22,7 +22,7 @@
             </div>
 
             <div class="nav__toolbar-user" sec:authorize="isAuthenticated()">
-                <a th:href="@{/profilo}" class="nav__toolbar-button nav__toolbar-button--profile">Utente</a>
+                <a href="#" class="nav__toolbar-button nav__toolbar-button--profile">Utente</a>
                 <form th:action="@{/logout}" method="post" class="nav__toolbar-logout-form">
                     <button type="submit" class="nav__toolbar-button nav__toolbar-button--logout">Esci</button>
                 </form>
