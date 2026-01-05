@@ -152,9 +152,6 @@
             </div>
 
             <div class="contact-actions">
-                <a th:href="'mailto:' + ${annuncio.autore.email}" class="btn-primary full-width" style="margin-bottom: 0.5rem;">
-                    <i class="fa-regular fa-envelope"></i> Contatta via Email
-                </a>
 
                 <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn-secondary full-width" style="text-align:center; text-decoration:none; display:block;">
                     <i class="fa-solid fa-right-to-bracket"></i> Accedi per contattare
