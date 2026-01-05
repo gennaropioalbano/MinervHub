@@ -52,24 +52,24 @@ a {
 }
 
 .nav__right {
-    display: flex !important;
-    align-items: center !important;
+    display: flex;
+    align-items: center;
     gap: 20px;
 }
 
 .nav__menu {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 20px;
     list-style: none;
     /* Reset fondamentale per contrastare Bootstrap */
-    margin-bottom: 0 !important;
-    padding-left: 0 !important;
+    margin-bottom: 0;
+    padding-left: 0;
 }
 
 .nav__menu-link {
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     transition: all 0.3s ease;
