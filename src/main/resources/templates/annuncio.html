@@ -66,11 +66,20 @@
     </style>
 </head>
 <body>
+
+<header th:replace="~{fragments/navbar :: navFragment}"></header>
+
 <div th:if="${errorMessage}" style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
     <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
 </div>
 
-<header th:replace="~{fragments/navbar :: navFragment}"></header>
+<div th:if="${successMessage}" class="container mt-3">
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert"
+         style="border-radius: 15px; border: none; background-color: #d1e7dd; color: #0f5132; padding: 10px; display: flex; justify-content: center; align-items: center; gap: 15px">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${successMessage}">Messaggio di successo</span>
+    </div>
+</div>
 
 <main class="detail-container">
 

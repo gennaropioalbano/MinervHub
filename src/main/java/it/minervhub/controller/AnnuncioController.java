@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -83,13 +84,16 @@ public class AnnuncioController {
     public String creaAnnuncio(
             @Valid @ModelAttribute("annuncioDto") AnnuncioDTO dto,
             BindingResult bindingResult,
-            Principal principal) {
+            Principal principal,
+            RedirectAttributes redirectAttributes) { // Aggiunto questo
 
         if (bindingResult.hasErrors()) {
-            return "/creaAnnuncio";
+            return "creaAnnuncio";
         }
 
         annuncioService.creaAnnuncio(dto, principal.getName());
+        // Aggiungiamo il messaggio di successo
+        redirectAttributes.addFlashAttribute("successMessage", "Annuncio creato con successo!");
 
         return "redirect:/annuncio/miei";
     }
@@ -130,17 +134,18 @@ public class AnnuncioController {
     public String modificaAnnuncio(
             @Valid @ModelAttribute("annuncioDto") AnnuncioDTO dto,
             BindingResult bindingResult,
-            Principal principal, Model model) {
+            Principal principal,
+            Model model,
+            RedirectAttributes redirectAttributes) { // Aggiunto questo
 
         if (bindingResult.hasErrors()) {
             return "creaAnnuncio";
         }
 
         annuncioService.modificaAnnuncio(dto.getId(), dto, principal.getName());
+        redirectAttributes.addFlashAttribute("successMessage", "Annuncio aggiornato correttamente!");
 
-        model.addAttribute("mostraPublisher", false);
-
-        return "redirect:/annuncio/{id}";
+        return "redirect:/annuncio/" + dto.getId();
     }
 
     /**
@@ -150,11 +155,11 @@ public class AnnuncioController {
      * @return redirect alla lista degli annunci dell'utente
      */
     @GetMapping("/eliminaAnnuncio/{id}")
-    public String eliminaAnnuncio(@PathVariable Long id) {
+    public String eliminaAnnuncio(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         annuncioService.eliminaAnnuncio(id);
+        redirectAttributes.addFlashAttribute("successMessage", "L'annuncio è stato rimosso.");
         return "redirect:/annuncio/miei";
     }
-
     /**
      * Mostra la lista degli annunci creati dall'utente autenticato.
      *
