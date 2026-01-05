@@ -32,10 +32,13 @@ a {
 }
 
 .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
     padding: 20px 5%;
+    background-color: var(--clr-white);
+    position: relative;
+    z-index: 1000;
 }
 
 .nav__brand {
@@ -49,20 +52,26 @@ a {
 }
 
 .nav__right {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
     gap: 20px;
 }
 
 .nav__menu {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     gap: 20px;
     list-style: none;
+    /* Reset fondamentale per contrastare Bootstrap */
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
 }
 
 .nav__menu-link {
+    margin-bottom: 0 !important;
+    display: flex;
+    align-items: center;
     transition: all 0.3s ease;
 }
 
@@ -88,12 +97,21 @@ a {
 }
 
 .nav__toolbar-button {
-    padding: 5px 10px;
+    display: inline-flex;    /* Usa flex per centrare il testo internamente */
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
     border-radius: 20px;
-    color: var(--clr-white);
+    color: var(--clr-white) !important; /* Forza il colore */
     background-color: var(--clr-primary);
     cursor: pointer;
     transition: all 0.3s ease;
+    border: none;            /* Rimuove bordi di default di Bootstrap */
+
+    /* FIX CRUCIALE PER BOOTSTRAP */
+    line-height: 1 !important;
+    font-size: 1rem;         /* Forza una dimensione fissa */
+    text-decoration: none !important;
 }
 
 .nav__toolbar-button:hover {
